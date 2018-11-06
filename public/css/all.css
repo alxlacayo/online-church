@@ -1,0 +1,7 @@
+html, body {
+	height: 100%;
+	-moz-font-feature-settings: "ss01", "ss02";
+	-webkit-font-feature-settings: "ss01", "ss02";
+	font-feature-settings: "ss01", "ss02";
+}
+

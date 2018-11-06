@@ -1,0 +1,100 @@
+
+// Spacing
+$spacer: 1rem;
+$spacers: ();
+$spacers: map-merge(
+  (
+    0: 0,
+    1: ($spacer * .0625),
+    2: ($spacer * .125),
+    3: ($spacer * .1875),
+    4: ($spacer * .25),
+    5: ($spacer * .3125),
+    6: ($spacer * .375),
+    8: ($spacer * .5),
+    10: ($spacer * .625),
+    12: ($spacer * .75),
+    15: ($spacer * .9375),
+    16: $spacer,
+    20: ($spacer * 1.25),
+    24: ($spacer * 1.5),
+    30: ($spacer * 1.875),
+    32: ($spacer * 2),
+    36: ($spacer * 2.25),
+    40: ($spacer * 2.5),
+    45: ($spacer * 2.8125),
+    48: ($spacer * 3),
+    50: ($spacer * 3.125),
+    56: ($spacer * 3.5),
+    60: ($spacer * 3.75),
+    64: ($spacer * 4),
+    80: ($spacer * 5),
+  ),
+  $spacers
+);
+
+
+// Typography
+$font-family-sans-serif: Helvetica,Arial,sans-serif; 
+$font-size-xx-sm: 0.625rem; 
+$font-size-x-sm: 0.75rem;  
+$font-size-sm:   0.8125rem;
+$font-size-base: 0.875rem;
+$font-size-lg: 0.9375rem;
+$font-size-x-lg: 1rem; 
+$font-size-huge: 5.5rem;
+
+$font-weight-bold: 700;
+$font-weight-extra-bold: 800;
+
+$line-height-base: 1.5;
+
+$headings-margin-bottom: ($spacer * 2);
+$headings-line-height: 1.5;
+$headings-font-weight: $font-weight-bold;
+
+$h1-font-size: 1.875rem;
+$h2-font-size: 1.5rem;
+
+
+// Colors
+$white: #fff;
+$black: #080808;
+$light-grey: #f6f6f6;
+$red: #ef5858;
+
+$theme-colors: (
+	"light-grey": $light-grey,
+	"black": $black
+);
+
+$gray-600: rgba($black, .5);
+
+$body-bg: $white;
+$border-color: #ebebeb;
+$input-placeholder-color: #aaa;
+$text-muted: #aaa;
+
+// Sizes
+$sizes: (
+	16: $spacer * 22.5,
+);
+
+
+// Links
+$link-color: theme-color("black");
+$link-hover-color: theme-color("black");
+
+
+// Rounded
+$enable-rounded: false;
+
+
+// Forms
+$input-focus-box-shadow: none;
+$input-btn-focus-width: 0;
+
+
+// Header
+$header-height: 5rem;
+$header-height-md-up: 7.5rem;

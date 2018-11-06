@@ -1,0 +1,490 @@
+
+// Required
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/mixins";
+// Custom Variables
+@import 'variables';
+@import "~bootstrap/scss/variables";
+
+// Optional
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/utilities/display";
+@import "~bootstrap/scss/utilities/flex";
+@import "~bootstrap/scss/utilities/position";
+@import "~bootstrap/scss/utilities/sizing";
+@import "~bootstrap/scss/utilities/spacing";
+@import "~bootstrap/scss/utilities/embed";
+@import "~bootstrap/scss/utilities/borders";
+@import "~bootstrap/scss/utilities/text";
+@import "~bootstrap/scss/utilities/background";
+@import "~bootstrap/scss/utilities/screenreaders";
+
+
+html { height: 100%; }
+
+body {
+	height: 100%;
+	-webkit-font-feature-settings: "ss01", "ss02";
+	font-feature-settings: "ss01", "ss02";
+	color: theme-color("black");
+}
+
+textarea {
+	height: auto;
+	resize: none;
+	outline: none;
+	-moz-font-feature-settings: inherit;
+	-webkit-font-feature-settings: inherit;
+	font-feature-settings: inherit;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+button:focus {
+  outline: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: theme-color("black");
+  // -webkit-box-shadow: 0 0 0px 1px #fff inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+textarea::-webkit-input-placeholder {
+	color: $input-placeholder-color;
+	opacity: 1;
+}
+textarea:-ms-input-placeholder {
+	color: $input-placeholder-color;
+	opacity: 1;
+}
+textarea::-ms-input-placeholder {
+	color: $input-placeholder-color;
+	opacity: 1;
+}
+textarea::placeholder {
+	color: $input-placeholder-color;
+	opacity: 1;
+}
+
+.overflow-hidden {
+	overflow: hidden;
+}
+
+.overflow-y {
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+}
+
+.mh-0 {
+	min-height: 0;
+}
+
+.mh-vh {
+	min-height: 100vh;
+}
+
+.form-narrow {
+	width: 100%;
+}
+
+@include media-breakpoint-up(sm) {
+	.form-narrow {
+		width: $spacer * 20;
+	}
+}
+
+.border-3 {
+	border-width: 3px !important; 
+}
+
+.xxsmall {
+	font-size: $font-size-xx-sm;
+}
+
+.xsmall {
+  font-size: $font-size-x-sm;
+}
+
+small,
+.small {
+  font-size: $font-size-sm;
+}
+
+.large {
+	font-size: $font-size-lg;
+}
+
+.xlarge {
+	font-size: $font-size-x-lg;
+}
+
+.huge {
+	font-size: 10.5vw;
+	font-weight: 800;
+	line-height: 1.1;
+	letter-spacing: -.1rem;
+}
+
+@include media-breakpoint-up(md) {
+	.huge {
+		font-size: $font-size-huge; 
+	}
+}
+
+.line-height-1 {
+	line-height: 1;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+.form-control {
+	height: auto;
+	color: theme-color("black");
+	background: none;
+}
+
+.form-control:focus {
+	background: none;
+}
+
+.comment-box {
+	min-height: $header-height;
+	max-height: 30vh;
+}
+
+.profile-picture {
+	display: block;
+	width: $spacer * 2.625;
+	height: $spacer * 2.625;
+	background: #aaa;
+	border-radius: 50%;
+}
+
+.profile-picture-large {
+	width: $spacer * 8;
+	height: $spacer * 8;
+}
+
+@include media-breakpoint-up(md) {
+	.video-header {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 100;
+	}
+
+	.video-sidebar {
+		width: 45%;
+		max-width: $spacer * 26;
+	}
+}
+
+.narrow-container {
+	max-width: 720px;
+}
+
+.schedule-time {
+	flex-basis: 25%;
+}
+
+.schedule-name {
+	flex-basis: 50%;
+}
+
+.schedule-reminder {
+	flex-basis: 25%;
+}
+
+.live-broadcast { 
+	font-size: $font-size-xx-sm;
+	font-weight: $font-weight-bold;
+	line-height: 1;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+
+.text-vertical {
+	writing-mode: tb-rl;
+}
+
+header,
+.bar {
+	height: $header-height;
+}
+
+header {
+	height: 7.5rem;
+}
+
+header div {
+	 flex-basis: 0;
+}
+
+.home header {
+	background: $black;
+
+	.logo,
+	.user {
+		color: $white;
+	}
+
+	&.menu-activated .logo,
+	&.menu-activated .user {
+		color: $black;	
+	}
+
+	.menu-toggle::before,
+	.menu-toggle::after {
+		background: $white;
+	}
+
+	&.menu-activated .menu-toggle::before,
+	&.menu-activated .menu-toggle::after {
+		background: $black;
+	}
+}
+
+.logo {
+	font-size: $font-size-lg;
+	font-weight: $font-weight-bold;
+	letter-spacing: -.025rem;
+	z-index: 102;
+}
+
+.user {
+	z-index: 102;
+}
+
+
+
+.menu-toggle {
+	position: relative;
+	display: block;
+	width: 30px;
+	height: 32px;
+	z-index: 110;
+	cursor: pointer;
+}
+
+.menu-toggle::before,
+.menu-toggle::after {
+	position: absolute;
+	top: 11px;
+	right: 0;
+	left: 0;
+	height: 2px;
+	background: $black;
+	content: '';
+    -webkit-transition: all .2s; /* Safari */
+    transition: all .2s;
+}
+
+.menu-toggle::after {
+	top: auto;
+	bottom: 11px;
+}
+
+.menu-activated .menu-toggle::before {
+	top: 15px;
+	transform: rotate(135deg);
+}
+
+.menu-activated .menu-toggle::after {
+	bottom: 15px;
+	transform: rotate(-135deg);
+}
+
+.menu {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 0;
+	background: $white;
+	z-index: 100;
+
+    ul {
+    	padding-top: $header-height;
+    	padding-left: 0;
+		list-style: none;
+    }
+
+    li {
+    	font-size: $h1-font-size;
+    	font-weight: $font-weight-bold;
+    }
+}
+
+@include media-breakpoint-up(md) {
+	.menu {
+		ul {
+			padding-top: $header-height-md-up; 
+		}
+	}
+}
+
+.menu-activated .menu {
+	height: 100vh;
+}
+
+.close {
+	position: relative;
+	display: block;
+	width: 18px;
+	height: 18px;
+	z-index: 110;
+	cursor: pointer;
+}
+
+.close::before,
+.close::after {
+	position: absolute;
+	top: 8px;
+	left: -2px;
+	height: 2px;
+	width: 22px;
+	content: '';
+	background: $white;
+	transform: rotate(-45deg);
+}
+
+.close::after {
+	transform: rotate(45deg);
+}
+
+.close-small {
+	width: 10px;
+	height: 10px;
+}
+
+.close-small:before,
+.close-small:after {
+	top: 4px;
+	left: -1px;
+	width: 12px;
+	color: #ff2801;
+}
+
+.close-dark::before,
+.close-dark::after {
+	background: $black;
+}
+
+.broadcast-popup {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 18rem;
+	overflow: hidden;
+}
+
+.video-container {
+	height: 0;
+	padding-bottom: 56.25%
+}
+
+.online-icon {
+	display: inline-block;
+	margin-right: 4px;
+	width: 6px;
+	height: 6px;
+	background: #3ebe4d;
+	border-radius: 5px;
+}
+
+.latest-sermon {
+	position: relative;
+	min-height:	calc(100vh - 7.5rem);
+	background: $black;
+	overflow: hidden;
+}
+
+.sermon-image-container {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	overflow: hidden;
+	z-index: 0;
+
+	img {
+		margin-left: 50%;
+		height: 100%;
+		width: auto;
+		transform: translateX(-60%);
+	}
+}
+
+.move-up {
+	z-index: 10;
+}
+
+// Fix this: Login/Register..
+.error {
+	border: 1px solid red;
+}
+
+.border-bottom-heavy {
+	border-bottom: 2px solid #fff;
+}
+
+.picture-upload-wrapper {
+	position: relative;
+	cursor: pointer;
+	overflow: hidden;
+
+	div {
+		position: absolute;
+		background: black;
+		right: 4px;
+		bottom: 4px;
+		height: 32px;
+		width: 32px;
+		border-radius: 50%;
+	}
+
+	div::before,
+	div::after {
+		position: absolute;
+		top: 15px;
+		right: 10px;
+		width: 12px;
+		height: 2px;
+		background: white;
+		content: '';
+	}
+
+	div::after {
+		transform: rotate(90deg);
+	}
+
+	img {
+		opacity: 1;
+	}
+
+	input[type=file] {
+		position: absolute;
+		left: 0;
+		top: 0;
+		font-size: 200px;
+		opacity: 0;
+	}
+}
