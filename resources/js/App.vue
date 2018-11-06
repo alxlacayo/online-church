@@ -25,16 +25,16 @@
 				'layout',
 			]),
 			pageName: function() {
-				return this.$route.name.replace('.', '-');
+				return this.$route.name !== null
+					? this.$route.name.replace('.', '-')
+					: '';
 			}
 		},
 		methods: {
 			...mapMutations([
 				'setNextBroadcast',
 			]),
-		    broadcastStatusChanged: function(broadcast) {
-		    	console.log(broadcast);
-		    	
+		    broadcastStatusChanged: function(broadcast) {		    	
 		    	this.setNextBroadcast(broadcast);
 		    	// if ((this.$router.currentRoute.name == 'broadcast' 
 		    	// 	&& this.$refs.router.broadcast.id == broadcast.id)
