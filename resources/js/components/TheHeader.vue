@@ -56,7 +56,7 @@
 				v-else
 				:to="{ name: 'login', query: { redirect: $route.path } }"
 				@click.native="hideMenu"
-				class="large font-weight-bold"
+				class="user large font-weight-bold"
 			>Login</router-link>
 		</div>
 	</header>
