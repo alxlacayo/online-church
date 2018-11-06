@@ -51,10 +51,13 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 window.Pusher = require('pusher-js');
 
+const pusherKey = process.env.NODE_ENV == 'development' ? process.env.MIX_PUSHER_DEV_APP_KEY : process.env.MIX_PUSHER_PROD_APP_KEY;
+const pusherCluster = process.env.NODE_ENV == 'development' ? process.env.MIX_PUSHER_DEV_APP_CLUSTER : process.env.MIX_PUSHER_PROD_APP_CLUSTER;
+
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: process.env.MIX_PUSHER_APP_KEY,
-    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    key: pusherKey,
+    cluster: pusherCluster,
     encrypted: true,
     authEndpoint: '/w/api/broadcasting/auth'
 });
