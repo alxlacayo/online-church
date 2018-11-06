@@ -1,5 +1,5 @@
 <template>
 	<div>
-		Page not found, fam.
+		Page not found.
 	</div>
 </template>

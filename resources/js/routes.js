@@ -102,12 +102,7 @@ export const router = new VueRouter({
 			meta: {
 				requireAuth: true
 			}
-		},
-		{
-			path: '/404',
-			name: '404',
-			component: NotFound
-		},  
+		}, 
 		{
 			path: '/admin',
 			name: 'admin',
@@ -115,7 +110,7 @@ export const router = new VueRouter({
 		},
 		{
 			path: '*',
-			redirect: '/404'
+			redirect: '/'
 		}
 	] 
 })
