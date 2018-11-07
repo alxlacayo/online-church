@@ -10,7 +10,6 @@ use App\Events\BroadcastClosed;
 use App\Broadcast;
 use App\Sermon;
 use Carbon\Carbon;
-use Log;
 
 class SendBroadcastNotifications
 {
@@ -48,7 +47,7 @@ class SendBroadcastNotifications
             ->where('enabled', 1)
             ->oldest('starts_at')
             ->get();
-Log::debug('yuhhhh');
+
         foreach ($broadcasts as $broadcast) {
             $durationInSeconds = $broadcast->live ? Broadcast::LIVE_BROADCAST_DURATION : $sermon->duration;
             $opensAt = $broadcast->opensAt();
@@ -76,7 +75,7 @@ Log::debug('yuhhhh');
             } else if ($closesAt->isPast()) {
                 // Save broadcast so our listener can update
                 // the new starts_at timestamp
-                Log::debug('closed');
+
                 $broadcast->save();
                 $broadcast->status = Broadcast::BROADCAST_CLOSED;
 
