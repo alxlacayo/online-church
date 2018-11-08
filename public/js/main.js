@@ -48302,7 +48302,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -48358,15 +48357,7 @@ var render = function() {
           _vm._l(_vm.sermons, function(sermon) {
             return _c(
               "div",
-              {
-                key: sermon.id,
-                staticClass: "col-12 col-md-6 px-md-15",
-                on: {
-                  click: function($event) {
-                    _vm.openSermon(sermon.id)
-                  }
-                }
-              },
+              { key: sermon.id, staticClass: "col-12 col-md-6 px-md-15" },
               [
                 _c(
                   "div",

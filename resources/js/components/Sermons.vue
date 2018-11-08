@@ -18,7 +18,6 @@
 					<div
 						v-for="sermon in sermons"
 						:key="sermon.id"
-						@click="openSermon(sermon.id)"
 						class="col-12 col-md-6 px-md-15"
 					>
 						<div class="mb-60">
