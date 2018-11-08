@@ -23,19 +23,14 @@ class HostDashboardController extends Controller
         $this->middleware('role:host');
     }
 
-    // Add specifics
+    /**
+     * Return the data to display inside the host panel.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $reqest)
     {
-        $broadcast = Broadcast::where('enabled', 1)
-            ->oldest('starts_at')
-            ->first();
-
-        $broadcast->configure();
-
-        if (!isset($broadcast->sermon)) {
-            $broadcast->loadSermon();
-        }
-
         $hostComments = HostComment::with('user')
             ->orderBy('id', 'desc')
             ->take(10)
@@ -43,8 +38,7 @@ class HostDashboardController extends Controller
             ->reverse()
             ->values();
 
-    	return response()->json([ 
-            'broadcast' => $broadcast,
+    	return response()->json([
             'host_comments' => $hostComments
         ]);
     }

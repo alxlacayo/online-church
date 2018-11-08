@@ -42,7 +42,7 @@
 				<span class="xlarge font-weight-bold">Host chat</span>
 				<span class="small text-muted">
 					<span
-						v-if="hosts.length > 0"
+						v-if="hosts && hosts.length > 0"
 						class="online-icon"
 					></span>
 					<span>{{ hosts.length }} {{ hosts.length == 1 ? 'host' : 'hosts' }} online</span>
@@ -73,6 +73,7 @@
 	import HostChat from '../components/HostChat'
 	import BroadcastChat from '../components/BroadcastChat'
 	import broadcastMixin from '../mixins/broadcastMixin'
+	import { mapState } from 'vuex'
 
 	export default {
 		components: {
@@ -84,7 +85,6 @@
 		mixins: [broadcastMixin],
 		data: function() {
 			return {
-				broadcast: null,
 				hosts: [],
 				hostComments: []
 			}
@@ -104,14 +104,19 @@
 				});
 		},
 		computed: {
+			...mapState([
+				'nextBroadcast',
+			]),
+			broadcast: function() {
+				return this.nextBroadcast;
+			},
 			autoplay: function() {
 				return this.$_broadcastMixin_isBroadcastInProgress;
 			}
 		},
 		methods: {
 			setData: function(data) {
-				this.broadcast = data.broadcast;
-				this.hostComments = data.host_comments;
+				this.hostComments.push(...data.host_comments);
 			}
 		}
 	}
