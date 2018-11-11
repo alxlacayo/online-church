@@ -32,9 +32,11 @@ class UserController extends Controller
         ]);
 
         $user = $request->user();
-        $data = $request->only('name', 'email');
-        $user->fill($data);
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+
         $user->save();
+        $user->makeVisible('email');
         $user->setProfilePictureSize('large');
 
         return response()->json($user);
