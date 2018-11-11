@@ -13,6 +13,16 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     {{-- <link href="{{ asset('css/all.css') }}" rel="stylesheet"> --}}
     
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1725903-8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-1725903-8');
+    </script>
+
     <script type="text/javascript">
         window.AppUser = @if(isset($user)) @json($user) @else null @endif;
         window.AppIntroVideo = @json($intro_video);
