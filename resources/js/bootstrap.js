@@ -92,3 +92,6 @@ window.Moment.updateLocale('en', {
         yy: "%dy"
     }
 });
+
+window.Linkify = require('linkifyjs');
+window.LinkifyHtml = require('linkifyjs/html');

@@ -11,7 +11,7 @@
 					v-for="comment in comments"
 					:key="comment.id"
 					:id="'comment-' + comment.id"
-					class="d-flex mb-36 flex-shrink-0"
+					class="comment d-flex mb-36 flex-shrink-0"
 				>	
 					<img
 						:src="comment.user.profile_picture"
@@ -26,7 +26,12 @@
 							>Host</span>
 						</div>
 						<div>
-							<span>{{ comment.text }}</span>
+							<template v-if="comment.user.is_host">
+								<span v-html="formatCommentLinks(comment.text)"></span>
+							</template>
+							<template v-else>
+								<span>{{ comment.text }}</span>
+							</template>
 						</div>
 					</div>
 				</div>
@@ -84,6 +89,9 @@
 			])
 		},
 		methods: {
+			formatCommentLinks: function(text) {
+				return LinkifyHtml(text);
+			},
 			submitComment: function() {
 				if (this.isLoading) { return; }
 

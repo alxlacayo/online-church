@@ -156,11 +156,12 @@ small,
 
 .form-control {
 	height: auto;
-	color: theme-color("black");
+	color: $black;
 	background: none;
 }
 
 .form-control:focus {
+	color: $black;
 	background: none;
 }
 
@@ -489,4 +490,17 @@ header div {
 		font-size: 200px;
 		opacity: 0;
 	}
+}
+
+.comment {
+	 -ms-word-break: break-word;
+	     word-break: break-word;
+}
+
+.linkified {
+	text-decoration: underline;
+}
+
+.linkified:hover {
+	text-decoration: underline;
 }
