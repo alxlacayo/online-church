@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Sermon;
+use Carbon\Carbon;
 
 class SermonController extends Controller
 {
@@ -15,6 +16,7 @@ class SermonController extends Controller
     public function index()
     {        
         $pager = Sermon::latest('publish_on')
+            ->where('publish_on', '<=', Carbon::now())
             ->simplePaginate(10, ['id', 'title', 'image', 'publish_on']);
 
         return response()->json($pager);
