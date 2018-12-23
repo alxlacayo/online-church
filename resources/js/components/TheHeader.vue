@@ -21,6 +21,7 @@
 						<li @click="hideMenu"><router-link :to="{ name: 'home' }">Home</router-link></li>
 						<li @click="hideMenu"><router-link :to="{ name: 'schedule' }">Schedule</router-link></li>
 						<li @click="hideMenu"><router-link :to="{ name: 'sermons' }">Sermons</router-link></li>
+						<li><a href="http://bit.ly/2GxTkrk">Store</a></li>
 						<li @click="hideMenu"><router-link :to="{ name: 'contact' }">Contact</router-link></li>
 						<li><a href="https://pushpay.com/g/secondhouston?src=hpp" target="_blank">Give</a></li>
 						<template v-if="isUserAuthenticated">
