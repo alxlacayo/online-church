@@ -144,8 +144,8 @@
 					isFormValid = false;
 				}
 
-				if (this.password.length < 6) {
-					newAlerts.password = 'Password must be at least 6 characters.';
+				if (this.password.length < 8) {
+					newAlerts.password = 'Password must be at least 8 characters.';
 					isFormValid = false;
 				}
 
