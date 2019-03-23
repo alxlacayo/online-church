@@ -43,7 +43,7 @@
 			>
 				<salvation-button
 					@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
-					class="d-md-none salvation-button--small-screen justify-content-center"
+					class="d-md-none flex-shrink-0 justify-content-center salvation-button--small-screen"
 				></salvation-button>
 				<div class="px-30 px-md-40 py-40 bg-white">
 					<h1>{{ $_broadcastMixin_title }}</h1>

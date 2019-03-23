@@ -26,7 +26,7 @@
 			<div class="d-flex flex-column flex-grow-1 overflow-y">
 				<salvation-button
 					@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
-					class="d-md-none salvation-button--small-screen justify-content-center"
+					class="d-md-none flex-shrink-0 justify-content-center salvation-button--small-screen"
 				></salvation-button>
 				<div class="mx-30 mx-md-40 my-40">
 					<h1>{{ sermon.title }}</h1>
