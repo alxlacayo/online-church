@@ -11,12 +11,9 @@
 				<div class="d-flex mx-0 mx-lg-60 flex-grow-1 flex-shrink-1 video-wrapper">
 					<video-player-living-as-one
 						v-if="$_broadcastMixin_isBroadcastLive && $_broadcastMixin_isBroadcastInProgress"
-					>
-						<div
-							v-html="broadcast.embed_code"
-							class="px-0 px-lg-60"
-						></div>
-					</video-player-living-as-one>
+						v-html="broadcast.embed_code"
+						class="d-flex flex-grow-1 align-items-center"
+					></video-player-living-as-one>
 					<video-player-vimeo
 						v-else
 						:video-id="$_broadcastMixin_videoId"

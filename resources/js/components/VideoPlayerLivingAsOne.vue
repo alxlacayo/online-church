@@ -1,11 +1,8 @@
-<template>
-	<div>
-		<slot/>
-	</div>
-</template>
+<template></template>
 
 <script>
 	export default {
+		props: ['embedCode'],
 		data: function() {
 			return {
 				scriptId: 'livingAsOneScript'
