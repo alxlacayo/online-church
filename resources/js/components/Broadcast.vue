@@ -27,6 +27,7 @@
 				<div class="d-none d-md-flex mx-30 mx-md-60 flex-shrink-0 justify-content-center bar">
 					<salvation-button
 						@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
+						:isSmallScreenButton="false"
 					></salvation-button>
 				</div>
 				<salvation-confirmation
