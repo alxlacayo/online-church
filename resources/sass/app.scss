@@ -28,9 +28,8 @@ html { height: 100%; }
 
 body {
 	height: 100%;
-	-webkit-font-feature-settings: "ss01", "ss02";
-	font-feature-settings: "ss01", "ss02";
 	color: theme-color("black");
+	-moz-osx-font-smoothing: grayscale;
 }
 
 textarea {
@@ -231,8 +230,10 @@ header,
 	height: $header-height;
 }
 
-header {
-	height: 7.5rem;
+@include media-breakpoint-up(md) {
+	header {
+		// height: 7.5rem;
+	}
 }
 
 header div {
@@ -387,6 +388,11 @@ header div {
 	color: #ff2801;
 }
 
+.close-grey::before,
+.close-grey::after {
+	background: #bfbfbf;
+}
+
 .close-dark::before,
 .close-dark::after {
 	background: $black;
@@ -403,6 +409,17 @@ header div {
 .video-container {
 	height: 0;
 	padding-bottom: 56.25%
+}
+
+.video-content {
+	overflow-y: scroll;
+}
+
+@include media-breakpoint-up(md) {
+	.video-wrapper {
+		min-height: 20rem;
+		max-height: calc(100vh - 10rem);
+	}
 }
 
 .online-icon {
@@ -500,4 +517,112 @@ header div {
 .linkified,
 .linkified:hover {
 	text-decoration: underline;
+}
+
+.salvation-button {
+	position: relative;
+	padding: 0 2rem 0;
+	font-size: .8125rem;
+	font-weight: bold;
+	text-align: center;
+	text-transform: uppercase;
+	color: #fff;
+	letter-spacing: .125rem;
+	cursor: pointer;
+}
+
+.salvation-button--small-screen {
+	color: #fff;
+	padding: 1.5rem 0;
+	background: #80B1F0;
+}
+
+.salvation-button-underline {
+	position: absolute;
+	display: block;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 2px;
+	background: #80B1F0;
+}
+
+.salvation-confirmation-wrapper {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,.5);
+	z-index: 120;
+	overflow-y: scroll;
+}
+
+.salvation-confirmation {
+	position: absolute;
+	padding: 5rem 1.5rem 4rem;
+	width: calc(100% - 1rem);
+	max-width: 440px;
+	background: #fff;
+	text-align: center;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+	.close {
+		position: absolute;
+		top: 24px;
+		right: 24px;
+	}
+}
+
+@include media-breakpoint-up(sm) {
+	.salvation-confirmation {
+		padding-left: 3rem;
+		padding-right: 3rem;
+	}
+}
+
+.salvation-confirmation-emoji {
+	display: block;
+	margin-bottom: 2rem;
+	font-size: 3rem;
+	line-height: 1;
+}
+
+.salvation-confirmation-title {
+	display: block;
+	margin-bottom: 2rem;
+	font-size: 1.75rem;
+	line-height: 2rem;
+	font-weight: bold;
+}
+
+@include media-breakpoint-up(sm) {
+	.salvation-confirmation-title {
+		font-size: 2rem;
+	}
+}
+
+.salvation-confirmation-description {
+	display: block;
+	margin-bottom: 2rem;
+	line-height: 1.5rem;
+	color: #666;
+}
+
+.salvation-confirmation-btn {
+	display: inline-block;
+	height: 3rem;
+	padding: 0 3rem;
+	font-weight: bold;
+	line-height: 3rem;
+	background: #80B1F0;
+	color: #fff;
+	border-radius: 1.5rem;
+
+	&:hover {
+		color: #fff;
+	}
 }

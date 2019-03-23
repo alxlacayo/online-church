@@ -1,34 +1,49 @@
 <template>
 	<div class="d-flex flex-column flex-md-row flex-grow-1">
 		<template v-if="$_broadcastMixin_isBroadcastLoaded && $_broadcastMixin_isBroadcastOpen">
-			<div class="position-relative d-flex flex-column flex-shrink-0 flex-md-shrink-1 flex-md-grow-1 justify-content-center bg-black">
-				<div class="d-flex mx-30 mx-md-60 align-items-center flex-shrink-0 justify-content-between bar video-header">
+			<div class="position-relative d-flex flex-column flex-shrink-0 flex-md-shrink-1 flex-md-grow-1 bg-black video-content">
+				<div class="d-flex mx-30 mx-md-60 flex-shrink-0 align-items-center bar">
 					<span
 						@click="goBack"
 						class="close"
 					></span>
 				</div>
-				<video-player-living-as-one
-					v-if="$_broadcastMixin_isBroadcastLive && $_broadcastMixin_isBroadcastInProgress"
-				>
-					<div
-						v-html="broadcast.embed_code"
+				<div class="d-flex mx-0 mx-lg-60 flex-grow-1 flex-shrink-1 video-wrapper">
+					<video-player-living-as-one
+						v-if="$_broadcastMixin_isBroadcastLive && $_broadcastMixin_isBroadcastInProgress"
+					>
+						<div
+							v-html="broadcast.embed_code"
+							class="px-0 px-lg-60"
+						></div>
+					</video-player-living-as-one>
+					<video-player-vimeo
+						v-else
+						:video-id="$_broadcastMixin_videoId"
+						:time-elapsed="$_broadcastMixin_timeElapsed"
 						class="px-0 px-lg-60"
-					></div>
-				</video-player-living-as-one>
-				<video-player-vimeo
-					v-else
-					:video-id="$_broadcastMixin_videoId"
-					:time-elapsed="$_broadcastMixin_timeElapsed"
-					class="px-0 px-lg-60"
-				/>
+					/>
+				</div>
+				<div class="d-none d-md-flex mx-30 mx-md-60 flex-shrink-0 justify-content-center bar">
+					<salvation-button
+						@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
+					></salvation-button>
+				</div>
+				<salvation-confirmation
+					@hide-salvation-confirmation="$_salvationMixin_hideSalvationConfirmation"
+					:isSalvationConfirmationVisible="$data.$_salvationMixin_isSalvationConfirmationVisible"
+				></salvation-confirmation>
 			</div>
 			<broadcast-chat
 				:broadcast-id="broadcast.id"
 				:scoll-to-bottom-on-load="false"
 				scroll-container-id="broadcast-comments"
 				class="video-sidebar bg-light-grey"
-			>		 
+			>
+				<salvation-button
+					@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
+					class="d-md-none salvation-button--small-screen justify-content-center"
+				></salvation-button>
 				<div class="px-30 px-md-40 py-40 bg-white">
 					<h1>{{ $_broadcastMixin_title }}</h1>
 					<p>{{ $_broadcastMixin_description }}</p>
@@ -57,16 +72,24 @@
 	import VideoPlayerVimeo from '../components/VideoPlayerVimeo'
 	import VideoPlayerLivingAsOne from '../components/VideoPlayerLivingAsOne'
 	import BroadcastChat from '../components/BroadcastChat'
+	import SalvationButton from '../components/SalvationButton'
+	import SalvationConfirmation from '../components/SalvationConfirmation'
 	import broadcastMixin from '../mixins/broadcastMixin'
+	import salvationMixin from '../mixins/salvationMixin'
 	import { mapState } from 'vuex'
 
 	export default {
 		components: {
 			VideoPlayerVimeo,
 			VideoPlayerLivingAsOne,
-			BroadcastChat
+			BroadcastChat,
+			SalvationButton,
+			SalvationConfirmation
 		},
-		mixins: [broadcastMixin],
+		mixins: [
+			broadcastMixin,
+			salvationMixin
+		],
 		data: function() {
 			return {
 				broadcast: null,

@@ -1,23 +1,32 @@
 <template>
 	<div class="d-flex flex-column flex-md-row flex-grow-1">	 	 
-		<div class="position-relative d-flex flex-column flex-shrink-0 flex-md-shrink-1 flex-md-grow-1 bg-black justify-content-center video-content">
-			<div class="d-flex mx-30 mx-md-60 flex-shrink-0 align-items-center bar video-header">
+		<div class="position-relative d-flex flex-column flex-shrink-0 flex-md-shrink-1 flex-md-grow-1 bg-black video-content">
+			<div class="d-flex mx-30 mx-md-60 flex-shrink-0 align-items-center bar">
 				<span
 					@click="goBack"
 					class="close"
 				></span>
 			</div>
-			<video-player-vimeo
-				v-if="videoLoaded"
-				:video-id="sermon.vimeo_id"
-				:autoplay="false"
-				class="px-0 px-lg-60"
-				ref="video"
-			/> 
+			<div class="d-flex mx-0 mx-lg-60 flex-grow-1 flex-shrink-1 video-wrapper">
+				<video-player-vimeo
+					v-if="videoLoaded"
+					:video-id="sermon.vimeo_id"
+					:autoplay="false"
+					ref="video"
+				/>
+			</div>
+			<div class="d-none d-md-flex mx-30 mx-md-60 flex-shrink-0 justify-content-center bar">
+				<salvation-button
+					@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
+				></salvation-button>
+			</div>
 		</div>
-
 		<div class="d-flex flex-column flex-grow-1 mh-0 video-sidebar">
 			<div class="d-flex flex-column flex-grow-1 overflow-y">
+				<salvation-button
+					@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
+					class="d-md-none salvation-button--small-screen justify-content-center"
+				></salvation-button>
 				<div class="mx-30 mx-md-40 my-40">
 					<h1>{{ sermon.title }}</h1>
 					<p>{{ sermon.description }}</p>
@@ -25,17 +34,26 @@
 				</div>
 			</div>
 		</div>
-
+		<salvation-confirmation
+			@hide-salvation-confirmation="$_salvationMixin_hideSalvationConfirmation"
+			:isSalvationConfirmationVisible="$data.$_salvationMixin_isSalvationConfirmationVisible"
+		></salvation-confirmation>
 	</div>
 </template>
 
 <script>
 	import VideoPlayerVimeo from '../components/VideoPlayerVimeo'
+	import SalvationButton from '../components/SalvationButton'
+	import SalvationConfirmation from '../components/SalvationConfirmation'
+	import salvationMixin from '../mixins/salvationMixin'
 
 	export default {
 		components: {
-			VideoPlayerVimeo
+			VideoPlayerVimeo,
+			SalvationButton,
+			SalvationConfirmation
 		},
+		mixins: [salvationMixin],
 		data: function() {
 			return {
 				sermon: {},
