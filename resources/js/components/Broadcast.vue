@@ -24,7 +24,7 @@
 						class="px-0 px-lg-60"
 					/>
 				</div>
-				<div class="d-none d-md-flex mx-30 mx-md-60 flex-shrink-0 justify-content-center bar">
+				<div class="d-none d-md-flex flex-shrink-0 justify-content-center bar">
 					<salvation-button
 						@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
 						:isSmallScreenButton="false"
