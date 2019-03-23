@@ -4,7 +4,9 @@
 		class="d-flex salvation-button align-items-center"
 	>
 		{{ buttonText }}
-		<span class="salvation-button-underline"></span>
+		<template v-if="!isSmallScreenButton">
+			<span class="salvation-button-underline"></span>
+		</template>
 	</span>
 </template>
 
