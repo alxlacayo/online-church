@@ -10,12 +10,9 @@
 			<template v-if="$_broadcastMixin_isBroadcastLoaded">
 				<video-player-living-as-one
 					v-if="$_broadcastMixin_isBroadcastLive && $_broadcastMixin_isBroadcastInProgress"
-				>
-					<div
-						v-html="broadcast.embed_code"
-						class="video-container"
-					></div>
-				</video-player-living-as-one>
+					v-html="broadcast.embed_code"
+					class="d-flex"
+				></video-player-living-as-one>
 				<video-player-vimeo 
 					v-else
 					:video-id="$_broadcastMixin_videoId"
