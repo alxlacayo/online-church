@@ -11,7 +11,7 @@
 			></span>
 			<span class="salvation-confirmation-emoji">🙌</span>
 			<span class="salvation-confirmation-title">Congratulations!</span>
-			<span class="salvation-confirmation-description">Click continue to fill out our commitment form and one of our team members will contact you!</span>
+			<span class="salvation-confirmation-description">Click continue to fill out your commitment form and one of our team members will contact you!</span>
 			<a href="https://fs17.formsite.com/second/form190/index.html" target="_blank" class="salvation-confirmation-btn">Continue</a>
 		</div>
 	</div>
