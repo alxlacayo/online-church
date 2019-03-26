@@ -77,7 +77,7 @@ window.Moment.updateLocale('en', {
     },
     relativeTime : {
         future: "in %s",
-        past:   "%s",
+        past: "%s",
         s  : "%ds",
         ss : "%ds",
         m:  "%dm",
