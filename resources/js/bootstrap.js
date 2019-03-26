@@ -77,21 +77,27 @@ window.Moment.updateLocale('en', {
     },
     relativeTime : {
         future: "in %s",
-        past: "%s",
-        s  : "%ds",
-        ss : "%ds",
-        m:  "%dm",
+        past: "%s ago",
+        s  : '%ds',
+        ss : '%ds',
+        m:  "1m",
         mm: "%dm",
-        h:  "%dh",
+        h:  "1h",
         hh: "%dh",
-        d:  "%dd",
+        d:  "1d",
         dd: "%dd",
-        M:  "%dm",
+        M:  "1m",
         MM: "%dm",
-        y:  "%dy",
+        y:  "1y",
         yy: "%dy"
     }
 });
+
+window.Moment.relativeTimeThreshold('s', 59);
+window.Moment.relativeTimeThreshold('m', 59);
+window.Moment.relativeTimeThreshold('h', 23);
+window.Moment.relativeTimeThreshold('d', 28);
+window.Moment.relativeTimeThreshold('M', 11);
 
 window.Linkify = require('linkifyjs');
 window.LinkifyHtml = require('linkifyjs/html');
