@@ -33,7 +33,7 @@ class HostDashboardController extends Controller
     {
         $hostComments = HostComment::with('user')
             ->orderBy('id', 'desc')
-            ->take(10)
+            ->take(20)
             ->get()
             ->reverse()
             ->values();
