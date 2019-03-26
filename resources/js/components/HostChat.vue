@@ -2,28 +2,24 @@
 	<div class="d-flex flex-column flex-grow-1 mh-0">
 		<div
 			:id="scrollContainerId"
-			class="d-flex flex-column flex-grow-1 border-bottom overflow-y"
+			class="d-flex flex-column pt-32 px-30 px-md-40 flex-grow-1 border-bottom overflow-y"
 		>	
-			<div class="pt-36">
-				<div
-					v-for="(comment, index) in comments"
-					:key="comment.id"
-					:id="'comment-' + comment.id"
-					class="d-flex px-30 px-md-40 pb-36 flex-shrink-0"
-				>	
-					<img
-						:src="comment.user.profile_picture"
-						class="profile-picture mt-2 mr-24 flex-shrink-0"
-					>
-					<div class="flex-grow-1">
-						<div class="d-flex align-items-center justify-content-between">
-							<span class="mb-4 font-weight-bold">{{ comment.user.name }}</span>
-							<!-- <span class="small" style="color: #bbb">{{ timeAgo(comment.created_at) }}</span> -->
-						</div>
-						<div>
-							<span>{{ comment.text }}</span>
-						</div>
+			<div
+				v-for="(comment, index) in comments"
+				:key="comment.id"
+				:id="'comment-' + comment.id"
+				class="d-flex pb-32 flex-shrink-0"
+			>	
+				<img
+					:src="comment.user.profile_picture"
+					class="profile-picture mr-24 flex-shrink-0"
+				>
+				<div class="flex-grow-1">
+					<div class="d-flex justify-content-between">
+						<span class="font-weight-bold">{{ comment.user.name }}</span>
+						<span class="xsmall text-muted">{{ timeElapsed(comment.created_at) }}</span>
 					</div>
+					<span>{{ comment.text }}</span>
 				</div>
 			</div>
 		</div>
@@ -61,6 +57,7 @@
 				cachedComment: '',
 				showLoadMore: true,
 				isLoading: false,
+				interval: '',
 				hosts: [],
 			}
 		},
@@ -140,7 +137,7 @@
 						 
 					});
 			},
-			timeAgo: function(timestamp) {
+			timeElapsed: function(timestamp) {
 				return Moment.utc(timestamp)
 					.fromNow(true);
 			}
@@ -164,9 +161,13 @@
 			    .listen('HostCommentCreated', (comment) => {
 			        this.$_chatMixin_publishComment(comment);
 			    });
+
+			this.interval = setInterval(() => this.$forceUpdate() , 10000);
 		},
 		beforeDestroy: function() {
 			Echo.leave('host.chat');
+
+			clearInterval(this.interval);
 		}
 	}
 </script>
