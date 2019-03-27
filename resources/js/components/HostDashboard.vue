@@ -1,6 +1,6 @@
 <template>
-	<div class="d-flex no-gutters flex-grow-1">
-		<div class="d-flex col-4 flex-column flex-grow-1 bg-black">
+	<div class="d-flex no-gutters">
+		<div class="d-flex flex-column col-4 flex-grow-1 bg-black">
 			<div class="bar px-30 px-md-40 d-flex align-items-center flex-shrink-0">
 				<router-link
 					:to="{ name: 'home' }"
@@ -34,23 +34,11 @@
 				></div>
 			</template>
 		</div>
-		<div class="d-flex flex-column col-4 border-left border-right bg-light-grey">
-			<div class="bar d-flex px-30 px-md-40 flex-shrink-0 align-items-center justify-content-between border-bottom">
-				<span class="xlarge font-weight-bold">Host chat</span>
-				<span class="small text-muted">
-					<span
-						v-if="hosts && hosts.length > 0"
-						class="online-icon"
-					></span>
-					<span>{{ hosts.length }} {{ hosts.length == 1 ? 'host' : 'hosts' }} online</span>
-				</span>
-			</div>
-			<host-chat
-				:previousComments="hostComments"
-				@hosts-update="hosts = $event"
-				scroll-container-id="host-chat"
-			/>
-		</div>
+		<host-chat
+			:previousComments="hostComments"
+			scroll-container-id="host-chat"
+			class="d-flex flex-column col-4 bg-light-grey border-right"
+		/>
 		<div class="d-flex flex-column col-4">
 			<div class="bar d-flex px-30 px-md-40 flex-shrink-0 align-items-center border-bottom">
 				<span class="xlarge font-weight-bold">Broadcast chat</span>
@@ -82,7 +70,6 @@
 		mixins: [broadcastMixin],
 		data: function() {
 			return {
-				hosts: [],
 				hostComments: []
 			}
 		},

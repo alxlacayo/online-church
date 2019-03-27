@@ -177,6 +177,11 @@ small,
 	border-radius: 50%;
 }
 
+.profile-picture--small {
+	width: 2rem;
+	height: 2rem;
+}
+
 .profile-picture-large {
 	width: $spacer * 8;
 	height: $spacer * 8;
@@ -521,6 +526,18 @@ header div {
 	text-decoration: underline;
 }
 
+.text-button {
+	cursor: pointer;
+	text-decoration: none;
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.text-button--small {
+	font-size: .8125rem;
+}
+
 .salvation-button {
 	position: relative;
 	padding: 0 2rem 0;
@@ -626,4 +643,21 @@ header div {
 	&:hover {
 		color: #fff;
 	}
+}
+
+.host-chat-header {
+	cursor: pointer;
+}
+
+.host-chat-header:hover .host-online-list {
+	display: block;
+}
+
+.host-online-list {
+	display: none;
+	position: absolute;
+	top: $header-height;
+	right: 0;
+	left: 0;
+	background: #fff;
 }

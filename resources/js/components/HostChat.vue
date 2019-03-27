@@ -1,14 +1,43 @@
 <template>
-	<div class="d-flex flex-column flex-grow-1 mh-0">
-		<div
+	<div>
+		<div class="bar d-flex px-40 flex-shrink-0 align-items-center justify-content-between border-bottom host-chat-header">
+			<span class="xlarge font-weight-bold">Host chat</span>
+			<span class="small text-muted">
+				<span
+					v-if="hosts && hosts.length > 0"
+					class="online-icon"
+				></span>
+				<span>{{ hosts.length }} {{ hosts.length == 1 ? 'host' : 'hosts' }} online</span>
+			</span>
+			<div class="host-online-list py-16 px-40">
+				<div
+					v-for="host in hosts"
+					class="d-flex py-8 align-items-center"
+				>
+					<img
+						:src="host.profile_picture"
+						class="profile-picture profile-picture--small mr-16 flex-shrink-0"
+					>
+					<span>{{ host.name }}</span>
+				</div>
+			</div>
+		</div>
+		<div 
 			:id="scrollContainerId"
-			class="d-flex flex-column pt-32 px-30 px-md-40 flex-grow-1 border-bottom overflow-y"
+			:class="['px-40 flex-grow-1 overflow-y', showLoadMoreButton ? 'pt-24' : 'pt-32']"
 		>	
+			<span
+				v-if="showLoadMoreButton"
+				@click="loadMore"
+				class="d-block mb-32 text-button text-button--small text-muted"
+			>
+				Load previous comments
+			</span>
 			<div
 				v-for="(comment, index) in comments"
 				:key="comment.id"
 				:id="'comment-' + comment.id"
-				class="d-flex pb-32 flex-shrink-0"
+				class="d-flex mb-32 flex-shrink-0"
 			>	
 				<img
 					:src="comment.user.profile_picture"
@@ -27,6 +56,7 @@
 			:value="newComment"
 			@input="newComment = $event"
 			@submit="submitComment"
+			class="border-top"
 		/>
 	</div>
 </template>
@@ -55,7 +85,7 @@
 				newComment: '',
 				newCommentId: 1,
 				cachedComment: '',
-				showLoadMore: true,
+				showLoadMoreButton: true,
 				isLoading: false,
 				interval: '',
 				hosts: [],
@@ -75,9 +105,6 @@
 		watch: {
 			previousComments: function() {
 				this.$_chatMixin_publishComments(this.previousComments);
-			},
-			hosts: function() {
-				this.$emit('hosts-update', this.hosts);
 			}
 		},
 		methods: {
@@ -125,7 +152,7 @@
 					.get('/w/api/host/comments?maxid=' + this.maxId)
 					.then(response => {
 						if (response.data.comments.length < response.data.limit) {
-							this.showLoadMore = false;
+							this.showLoadMoreButton = false;
 						}
 
 						this.comments.unshift(...response.data.comments);
