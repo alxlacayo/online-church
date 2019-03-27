@@ -2,12 +2,9 @@
 	<div>
 		<div class="bar d-flex px-40 flex-shrink-0 align-items-center justify-content-between border-bottom host-chat-header">
 			<span class="xlarge font-weight-bold">Host chat</span>
-			<span class="small text-muted">
-				<span
-					v-if="hosts && hosts.length > 0"
-					class="online-icon"
-				></span>
-				<span>{{ hosts.length }} {{ hosts.length == 1 ? 'host' : 'hosts' }} online</span>
+			<span class="d-flex align-items-center small text-muted">
+				<span class="online-icon"></span>
+				{{ hosts.length }} {{ hosts.length == 1 ? 'host' : 'hosts' }} online
 			</span>
 			<div class="host-online-list py-16 px-40">
 				<div
