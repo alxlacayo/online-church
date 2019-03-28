@@ -2,9 +2,9 @@
 	<div class="comment-box d-flex px-30 px-md-40 flex-shrink-0 overflow-y">
 		<form class="w-100 m-auto">	
 			<textarea
-				v-bind:value="value"
-				v-on:input="input"
-				v-on:keydown.enter="submit"
+				:value="value"
+				@input="input"
+				@keydown.enter="submit"
 				class="d-block px-0 py-10 w-100 form-control border-0"
 				placeholder="Write a message.."
 				rows="1"
