@@ -46,6 +46,7 @@
 			<broadcast-chat
 				v-if="$_broadcastMixin_isBroadcastLoaded && $_broadcastMixin_isBroadcastOpen"
 				:broadcast-id="broadcast.id"
+				:border-on-comment-form="true"
 				scroll-container-id="broadcast-comments"
 			></broadcast-chat>
 		</div>
