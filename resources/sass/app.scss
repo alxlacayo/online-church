@@ -440,7 +440,7 @@ header div {
 
 .latest-sermon {
 	position: relative;
-	min-height:	calc(100vh - 7.5rem);
+	min-height:	calc(100vh - #{$header-height});
 	background: $black;
 	overflow: hidden;
 }
