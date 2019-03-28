@@ -21,11 +21,11 @@
 		</div>
 		<div 
 			:id="scrollContainerId"
-			:class="['px-40 flex-grow-1 overflow-y', showLoadMoreButton ? 'pt-24' : 'pt-32']"
+			:class="['px-40 flex-grow-1 overflow-y', showLoadPreviousCommentsButton ? 'pt-24' : 'pt-32']"
 		>	
 			<span
-				v-if="showLoadMoreButton"
-				@click="loadMore"
+				v-if="showLoadPreviousCommentsButton"
+				@click="loadPreviousComments"
 				class="d-block mb-32 text-button text-button--small text-muted"
 			>
 				Load previous comments
@@ -82,7 +82,7 @@
 				newComment: '',
 				newCommentId: 1,
 				cachedComment: '',
-				showLoadMoreButton: true,
+				showLoadPreviousCommentsButton: true,
 				isLoading: false,
 				interval: '',
 				hosts: [],
@@ -144,15 +144,16 @@
 				this.newCommentId++;
 				this.isLoading = true;
 			},
-			loadMore: function() {
+			loadPreviousComments: function() {
 				axios
 					.get('/w/api/host/comments?maxid=' + this.maxId)
 					.then(response => {
 						if (response.data.comments.length < response.data.limit) {
-							this.showLoadMoreButton = false;
+							this.showLoadPreviousCommentsButton = false;
 						}
 
-						this.comments.unshift(...response.data.comments);
+						this.prependPreviousComments(response.data.comments);
+						
 					})
 					.catch(error => {
 
@@ -160,6 +161,18 @@
 					.then(() => {
 						 
 					});
+			},
+			prependPreviousComments: function(comments) {
+				let hostChat = document.getElementById("host-chat");
+				let hostChatScrollTop = hostChat.scrollTop;
+				let firstComment = document.getElementById("comment-" + this.comments[0].id);
+				let firstCommentOffsetTop = firstComment.offsetTop;
+
+				this.comments.unshift(...comments);
+
+				this.$nextTick(function() {
+					hostChat.scrollTop = firstComment.offsetTop + hostChatScrollTop - firstCommentOffsetTop;
+				});
 			},
 			timeElapsed: function(timestamp) {
 				return Moment.utc(timestamp)
