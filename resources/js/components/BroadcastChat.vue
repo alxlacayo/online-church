@@ -2,37 +2,35 @@
 	<div class="d-flex flex-column flex-grow-1 mh-0">
 		<div
 			:id="scrollContainerId"
-			class="d-flex flex-column flex-grow-1 border-bottom overflow-y"
+			class="d-flex flex-column flex-grow-1 overflow-y"
 		>
 			<slot/>
 
-			<div class="px-30 px-md-40 pt-36">
+			<div class="px-30 px-md-40 pt-32">
 				<div
 					v-for="comment in comments"
 					:key="comment.id"
 					:id="'comment-' + comment.id"
-					class="comment d-flex mb-36 flex-shrink-0"
+					class="comment d-flex mb-32 flex-shrink-0"
 				>	
 					<img
 						:src="comment.user.profile_picture"
-						class="profile-picture mt-2 mr-24 flex-shrink-0"
+						class="profile-picture mr-24 flex-shrink-0"
 					>
 					<div class="flex-grow-1">
-						<div class="mb-4">
-							<span class="font-weight-bold">{{ comment.user.name }}</span>
+						<div class="d-flex">
+							<span class="font-weight-bold mr-8">{{ comment.user.name }}</span>
 							<span
 								v-if="comment.user.is_host"
-								class="ml-4 text-muted"
+								class="small text-muted"
 							>Host</span>
 						</div>
-						<div>
-							<template v-if="comment.user.is_host">
-								<span v-html="formatCommentLinks(comment.text)"></span>
-							</template>
-							<template v-else>
-								<span>{{ comment.text }}</span>
-							</template>
-						</div>
+						<template v-if="comment.user.is_host">
+							<span v-html="formatCommentLinks(comment.text)"></span>
+						</template>
+						<template v-else>
+							<span>{{ comment.text }}</span>
+						</template>
 					</div>
 				</div>
 			</div>
@@ -42,7 +40,7 @@
 			:value="newComment"
 			@input="newComment = $event"
 			@submit="submitComment"
-			class="bg-white"
+			:class="[borderOnCommentForm ? 'border-top' : '', 'bg-white']"
 		/>
 		<span
 			v-else
@@ -65,6 +63,10 @@
 			scollToBottomOnLoad: {
 				type: Boolean,
 				default: true
+			},
+			borderOnCommentForm: {
+				type: Boolean,
+				default: false
 			}
 		},
 		components: {
