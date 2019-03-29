@@ -20,7 +20,7 @@
 		},
 		computed: {
 			buttonText: function() {
-				return this.isSmallScreenButton ? 'Accept Jesus Christ' : 'I want to accept Jesus Christ'; 
+				return this.isSmallScreenButton ? 'I want to accept Jesus Christ' : 'I want to accept Jesus Christ'; 
 			}
 		},
 		methods: {
