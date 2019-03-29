@@ -1,8 +1,7 @@
 <template>
 	<div
 		@click.self="hideSalvationConfirmation"
-		v-bind:class="[ isSalvationConfirmationVisible ? 'd-flex' : 'd-none' ]"
-		class="salvation-confirmation-wrapper justify-content-center align-items-center"
+		:class="[isSalvationConfirmationVisible ? 'd-flex' : 'd-none', 'salvation-confirmation-wrapper justify-content-center align-items-center']"
 	>
 		<div class="salvation-confirmation">
 			<span
