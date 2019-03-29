@@ -1,21 +1,21 @@
 <template>
 	<div>
-		<div class="bar d-flex px-40 flex-shrink-0 align-items-center justify-content-between border-bottom host-chat-header">
-			<span class="xlarge font-weight-bold">Host chat</span>
-			<span class="d-flex align-items-center small text-muted">
+		<div class="bar d-flex px-40 flex-shrink-0 align-items-stretch justify-content-between border-bottom">
+			<span class="align-self-center xlarge font-weight-bold">Host chat</span>
+			<div class="d-flex align-items-center host-online-count">
 				<span class="online-icon"></span>
-				{{ hosts.length }} {{ hosts.length == 1 ? 'host' : 'hosts' }} online
-			</span>
-			<div class="host-online-list py-16 px-40">
-				<div
-					v-for="host in hosts"
-					class="d-flex py-8 align-items-center"
-				>
-					<img
-						:src="host.profile_picture"
-						class="profile-picture profile-picture--small mr-16 flex-shrink-0"
+				<span class="small text-muted">{{ hosts.length }} {{ hosts.length == 1 ? 'host' : 'hosts' }} online</span>
+				<div class="host-online-list py-16 px-40 border-top">
+					<div
+						v-for="host in hosts"
+						class="d-flex py-8 align-items-center"
 					>
-					<span>{{ host.name }}</span>
+						<img
+							:src="host.profile_picture"
+							class="profile-picture profile-picture--small mr-16 flex-shrink-0"
+						>
+						<span>{{ host.name }}</span>
+					</div>
 				</div>
 			</div>
 		</div>

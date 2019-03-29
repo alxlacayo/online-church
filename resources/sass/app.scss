@@ -645,18 +645,18 @@ header div {
 	}
 }
 
-.host-chat-header {
+.host-online-count {
 	cursor: pointer;
 }
 
-.host-chat-header:hover .host-online-list {
+.host-online-count:hover .host-online-list {
 	display: block;
 }
 
 .host-online-list {
 	display: none;
 	position: absolute;
-	top: $header-height;
+	top: calc(#{$header-height} - 1px);
 	right: 0;
 	left: 0;
 	background: #fff;
