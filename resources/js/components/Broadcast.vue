@@ -12,7 +12,7 @@
 					<video-player-living-as-one
 						v-if="$_broadcastMixin_isBroadcastLive && $_broadcastMixin_isBroadcastInProgress"
 						v-html="broadcast.embed_code"
-						class="d-flex flex-grow-1 align-items-center"
+						class="d-flex flex-grow-1"
 					></video-player-living-as-one>
 					<video-player-vimeo
 						v-else
