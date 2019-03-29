@@ -422,6 +422,11 @@ header div {
 }
 
 #la1-video-player {
+	display: flex;
+	flex-grow: 1;
+}
+
+#la1-videoContainer {
 	flex-grow: 1;
 }
 

@@ -1,14 +1,14 @@
 <template>
 	<div class="d-flex flex-column flex-md-row flex-grow-1">
 		<template v-if="$_broadcastMixin_isBroadcastLoaded && $_broadcastMixin_isBroadcastOpen">
-			<div class="position-relative d-flex flex-column flex-shrink-0 flex-md-shrink-1 flex-md-grow-1 bg-black video-content">
+			<div class="d-flex flex-column flex-shrink-0 flex-md-shrink-1 flex-md-grow-1 justify-content-between bg-black video-content">
 				<div class="d-flex mx-30 mx-md-60 flex-shrink-0 align-items-center bar">
 					<span
 						@click="goBack"
 						class="close"
 					></span>
 				</div>
-				<div class="d-flex mx-0 mx-lg-60 flex-grow-1 flex-shrink-1 video-wrapper">
+				<div class="d-flex mx-0 mx-lg-60 flex-shrink-1 video-wrapper">
 					<video-player-living-as-one
 						v-if="$_broadcastMixin_isBroadcastLive && $_broadcastMixin_isBroadcastInProgress"
 						v-html="broadcast.embed_code"
