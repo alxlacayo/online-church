@@ -1,6 +1,6 @@
 <template>
-	<div class="d-flex no-gutters">
-		<div class="d-flex flex-column col-4 flex-grow-1 bg-black">
+	<div class="d-flex no-gutters flex-grow-1">
+		<div class="d-flex flex-column col-4 bg-black">
 			<div class="bar px-30 px-md-40 d-flex align-items-center flex-shrink-0">
 				<router-link
 					:to="{ name: 'home' }"
