@@ -412,7 +412,7 @@ header div {
 }
 
 .video-content {
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 @include media-breakpoint-up(md) {
