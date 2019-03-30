@@ -10,6 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
+        "@babel/polyfill": "^7.4.0",
         "@tinymce/tinymce-vue": "^1.1.0",
         "@vimeo/player": "^2.6.5",
         "axios": "^0.18",
@@ -19,7 +20,7 @@
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-echo": "^1.5.2",
-        "laravel-mix": "^4.0",
+        "laravel-mix": "^4.0.15",
         "linkifyjs": "^2.1.7",
         "lodash": "^4.17.11",
         "moment": "^2.23.0",
