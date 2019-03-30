@@ -7,7 +7,7 @@
     <title>Second Online</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}?v1.1" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1725903-8"></script>
@@ -27,7 +27,7 @@
 </head>
 <body>
     <div id="app"></div>
-    <script src="{{ asset('js/main.js') }}?v1.1"></script>
+    <script src="{{ mix('js/main.js') }}"></script>
     <script src="https://player.vimeo.com/api/player.js"></script>
 </body>
 </html>
