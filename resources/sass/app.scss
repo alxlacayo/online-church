@@ -411,10 +411,6 @@ header div {
 	padding-bottom: 56.25%
 }
 
-.video-content {
-	overflow-y: auto;
-}
-
 @include media-breakpoint-up(md) {
 	.video-wrapper {
 		min-height: 20rem;
