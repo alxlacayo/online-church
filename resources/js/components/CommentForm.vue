@@ -1,5 +1,5 @@
 <template>
-	<div class="comment-box d-flex px-30 px-md-40 flex-shrink-0 overflow-y">
+	<div class="comment-box d-flex px-30 px-md-40 flex-shrink-0 overflow-auto">
 		<form class="w-100 m-auto">	
 			<textarea
 				:value="value"

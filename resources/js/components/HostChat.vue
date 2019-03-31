@@ -21,7 +21,7 @@
 		</div>
 		<div 
 			:id="scrollContainerId"
-			:class="['px-40 flex-grow-1 overflow-y', showLoadPreviousCommentsButton ? 'pt-24' : 'pt-32']"
+			:class="['px-40 flex-grow-1 overflow-auto', showLoadPreviousCommentsButton ? 'pt-24' : 'pt-32']"
 		>	
 			<span
 				v-if="showLoadPreviousCommentsButton"

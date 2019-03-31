@@ -2,7 +2,7 @@
 	<div class="d-flex flex-column flex-grow-1 mh-0">
 		<div
 			:id="scrollContainerId"
-			class="d-flex flex-column flex-grow-1 overflow-y"
+			class="d-flex flex-column flex-grow-1 overflow-auto"
 		>
 			<slot/>
 

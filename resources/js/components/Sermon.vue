@@ -1,6 +1,6 @@
 <template>
 	<div class="d-flex flex-column flex-md-row flex-grow-1">	 	 
-		<div class="d-flex flex-column flex-shrink-0 flex-md-shrink-1 flex-md-grow-1 justify-content-between bg-black video-content">
+		<div class="d-flex flex-column flex-shrink-0 flex-md-shrink-1 flex-md-grow-1 justify-content-between overflow-auto bg-black">
 			<div class="d-flex mx-30 mx-md-60 flex-shrink-0 align-items-center bar">
 				<span
 					@click="goBack"
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 		<div class="d-flex flex-column flex-grow-1 mh-0 video-sidebar">
-			<div class="d-flex flex-column flex-grow-1 overflow-y">
+			<div class="d-flex flex-column flex-grow-1 overflow-auto">
 				<salvation-button
 					@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
 					class="d-md-none flex-shrink-0 justify-content-center salvation-button--small-screen"

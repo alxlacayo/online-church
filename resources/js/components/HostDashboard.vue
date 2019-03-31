@@ -22,7 +22,7 @@
 				/>
 				<div 
 					v-if="$_broadcastMixin_isBroadcastLive"
-					class="p-30 p-md-40 text-white overflow-y"
+					class="p-30 p-md-40 text-white overflow-auto"
 				>
 					<h1>{{ broadcast.name }}</h1>
 					<p>{{ broadcast.description }}</p>
@@ -30,7 +30,7 @@
 				<div
 					v-else-if="$_broadcastMixin_hasNotes"
 					v-html="broadcast.sermon.notes"
-					class="p-30 p-md-40 text-white overflow-y"
+					class="p-30 p-md-40 text-white overflow-"
 				></div>
 			</template>
 		</div>
