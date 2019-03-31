@@ -30,7 +30,7 @@
 				<div
 					v-else-if="$_broadcastMixin_hasNotes"
 					v-html="broadcast.sermon.notes"
-					class="p-30 p-md-40 text-white overflow-"
+					class="p-30 p-md-40 text-white overflow-auto"
 				></div>
 			</template>
 		</div>
