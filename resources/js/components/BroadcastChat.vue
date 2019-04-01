@@ -25,12 +25,7 @@
 								class="small text-muted"
 							>Host</span>
 						</div>
-						<template v-if="comment.user.is_host">
-							<span v-html="formatCommentLinks(comment.text)"></span>
-						</template>
-						<template v-else>
-							<span>{{ comment.text }}</span>
-						</template>
+						<span>{{ comment.text }}</span>
 					</div>
 				</div>
 			</div>
