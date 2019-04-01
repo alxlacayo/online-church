@@ -34,6 +34,7 @@ class SendBroadcastNotifications
     {
         $now = new Carbon();
         $now->second(0);
+        $now->microseconds(0);
         
         // Copy $now and add minutes so we can check if
         // now + MINUTES_BEFORE_START == publish_on/start_at time
