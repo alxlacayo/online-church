@@ -34,13 +34,13 @@
 				v-for="(comment, index) in comments"
 				:key="comment.id"
 				:id="'comment-' + comment.id"
-				class="d-flex mb-32 flex-shrink-0"
+				class="d-flex mb-32 flex-shrink-0 comment"
 			>	
 				<img
 					:src="comment.user.profile_picture"
 					class="profile-picture mr-24 flex-shrink-0"
 				>
-				<div class="flex-grow-1">
+				<div class="flex-grow-1 mw-0">
 					<div class="d-flex justify-content-between">
 						<span class="font-weight-bold">{{ comment.user.name }}</span>
 						<span class="xsmall text-muted">{{ timeElapsed(comment.created_at) }}</span>
