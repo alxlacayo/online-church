@@ -36,13 +36,13 @@ class SendBroadcastNotifications
 
         // Copy $now and add minutes so we can check if
         // now + MINUTES_BEFORE_START == publish_on/start_at time
-        $startTime = $now->copy()->addMinutes(Broadcast::MINUTES_BEFORE_START);
+        $possibleStartTime = $now->copy()->addMinutes(Broadcast::MINUTES_BEFORE_START);
 
-        $sermon = Sermon::where('publish_on', '<=', $startTime)
+        $sermon = Sermon::where('publish_on', '<=', $possibleStartTime)
             ->latest('publish_on')
             ->first();
 
-        $broadcasts = Broadcast::where('starts_at', '<=', $startTime)
+        $broadcasts = Broadcast::where('starts_at', '<=', $possibleStartTime)
             ->where('enabled', 1)
             ->oldest('starts_at')
             ->get();
