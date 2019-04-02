@@ -86,9 +86,6 @@
 			])
 		},
 		methods: {
-			formatCommentLinks: function(text) {
-				return LinkifyHtml(text);
-			},
 			submitComment: function() {
 				if (this.isLoading) { return; }
 

@@ -76,6 +76,3 @@ window.Moment.updateLocale('en', {
         sameElse: 'DD/MM/YYYY'
     }
 });
-
-window.Linkify = require('linkifyjs');
-window.LinkifyHtml = require('linkifyjs/html');
