@@ -43,7 +43,7 @@
 				<div class="flex-grow-1 mw-0">
 					<div class="d-flex justify-content-between">
 						<span class="font-weight-bold">{{ comment.user.name }}</span>
-						<span class="xsmall text-muted">{{ timeElapsed(comment.created_at) }}</span>
+						<span class="xsmall text-muted">{{ $_chatMixin_timeAgo(comment.created_at) }}</span>
 					</div>
 					<span>{{ comment.text }}</span>
 				</div>
@@ -173,10 +173,6 @@
 				this.$nextTick(function() {
 					hostChat.scrollTop = firstComment.offsetTop + hostChatScrollTop - firstCommentOffsetTop;
 				});
-			},
-			timeElapsed: function(timestamp) {
-				return Moment.utc(timestamp)
-					.fromNow(true);
 			}
 		},
 		created: function() {
