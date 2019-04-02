@@ -21,7 +21,6 @@
         "jquery": "^3.2",
         "laravel-echo": "^1.5.2",
         "laravel-mix": "^4.0.15",
-        "linkifyjs": "^2.1.7",
         "lodash": "^4.17.11",
         "moment": "^2.23.0",
         "popper.js": "^1.14.6",
