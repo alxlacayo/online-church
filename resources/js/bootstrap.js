@@ -74,30 +74,8 @@ window.Moment.updateLocale('en', {
         lastDay: '[Yesterday]',
         lastWeek: '[Last] dddd',
         sameElse: 'DD/MM/YYYY'
-    },
-    relativeTime : {
-        future: "in %s",
-        past: "%s ago",
-        s  : '%ds',
-        ss : '%ds',
-        m:  "1m",
-        mm: "%dm",
-        h:  "1h",
-        hh: "%dh",
-        d:  "1d",
-        dd: "%dd",
-        M:  "1m",
-        MM: "%dm",
-        y:  "1y",
-        yy: "%dy"
     }
 });
-
-window.Moment.relativeTimeThreshold('s', 59);
-window.Moment.relativeTimeThreshold('m', 59);
-window.Moment.relativeTimeThreshold('h', 23);
-window.Moment.relativeTimeThreshold('d', 28);
-window.Moment.relativeTimeThreshold('M', 11);
 
 window.Linkify = require('linkifyjs');
 window.LinkifyHtml = require('linkifyjs/html');
