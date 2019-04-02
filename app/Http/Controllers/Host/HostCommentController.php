@@ -30,7 +30,7 @@ class HostCommentController extends Controller
     {   
         if ($request->has('maxid')) {
             $maxId = $request->input('maxid');
-            $limit = 10;
+            $limit = 20;
             
             $comments = HostComment::with('user')
                 ->where('id', '<', $maxId)
