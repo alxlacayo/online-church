@@ -441,6 +441,10 @@ header div {
 	padding-top: 0;
 }
 
+.host #la1-videoContainer .la1-aspect-ratio::before {
+	padding-top: 56.25%;
+}
+
 .online-icon {
 	display: block;
 	margin-right: 8px;
