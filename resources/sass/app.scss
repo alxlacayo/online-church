@@ -416,9 +416,14 @@ header div {
 	padding-bottom: 56.25%
 }
 
+.video-wrapper {
+	height: 56.25vw;
+}
+
 @include media-breakpoint-up(md) {
 	.video-wrapper {
 		min-height: 20rem;
+		height: auto;
 		max-height: calc(100vh - 10rem);
 	}
 }
@@ -430,6 +435,10 @@ header div {
 
 #la1-videoContainer {
 	flex-grow: 1;
+}
+
+#la1-videoContainer .la1-aspect-ratio::before {
+	padding-top: 0;
 }
 
 .online-icon {

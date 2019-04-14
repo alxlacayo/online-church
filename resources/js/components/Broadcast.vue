@@ -8,7 +8,7 @@
 						class="close"
 					></span>
 				</div>
-				<div class="d-flex mx-0 mx-lg-60 flex-shrink-1 video-wrapper">
+				<div class="d-flex mx-0 mx-lg-60 flex-md-grow-1 flex-shrink-1 video-wrapper">
 					<video-player-living-as-one
 						v-if="$_broadcastMixin_isBroadcastLive && $_broadcastMixin_isBroadcastInProgress"
 						v-html="broadcast.embed_code"
