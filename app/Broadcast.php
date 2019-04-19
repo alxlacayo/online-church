@@ -3,9 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Events\BroadcastSaving;
-use Carbon\Carbon;
-use Log;
+use App\Events\BroadcastSaved;
 
 class Broadcast extends Model
 {
@@ -109,6 +107,16 @@ class Broadcast extends Model
     protected $appends = [];
 
     /**
+     * Get the broadcast sermon.
+     *
+     * @return \App\Sermon
+     */
+    public function sermon()
+    {
+        return $this->belongsTo('App\Sermon');
+    }
+
+    /**
      * Get the comments for the broadcast.
      * 
      * @return array  \App\BroadcastComment
@@ -116,92 +124,5 @@ class Broadcast extends Model
     public function comments()
     {
         return $this->hasMany('App\BroadcastComment');
-    }
-
-    /**
-     * Get the time the broadcast chat opens.
-     * 
-     * @return Carbon  \Carbon\Carbon
-     */
-    public function opensAt()
-    {
-        return $this->starts_at
-            ->subMinutes(self::MINUTES_BEFORE_START);
-    }
-
-    /**
-     * Get the time the broadcast ends.
-     * 
-     * @param  int     $durationInSeconds
-     * @return Carbon  \Carbon\Carbon
-     */
-    public function endsAt($durationInSeconds)
-    {
-        return $this->starts_at
-            ->addSeconds($durationInSeconds);
-    }
-
-    /**
-     * Get the time the broadcast chat closes.
-     * 
-     * @param  int     $durationInSeconds
-     * @return Carbon  \Carbon\Carbon
-     */
-    public function closesAt($durationInSeconds)
-    {
-        return $this->endsAt($durationInSeconds)
-            ->addMinutes(self::MINUTES_AFTER_END)
-            ->second(0);
-    }
-
-    /**
-     * Get the sermon for the broadcast.
-     * 
-     * @return Sermon \App\Sermon
-     */
-    public function loadSermon() 
-    {
-        $this->sermon = Sermon::where('publish_on', '<=', $this->starts_at)
-            ->latest('publish_on')
-            ->first();
-    }
-
-    /**
-     * Configure the broadcast by adding sermon & status.
-     * 
-     * @return void
-     */
-    public function configure()
-    {
-        $opensAt = $this->opensAt();
-        $startsAt = $this->starts_at;
-
-        if (!$this->live) {
-            $this->loadSermon();
-        }
-        
-        if ($opensAt->isFuture()) {
-            $this->status = self::BROADCAST_CLOSED;
-
-            return;
-        }
-
-        if ($startsAt->isFuture()) {
-            $this->status = self::BROADCAST_OPEN;
-
-            return;
-        }
-
-        $durationInSeconds = $this->live ? self::LIVE_BROADCAST_DURATION : $this->sermon->duration;
-        $endsAt = $this->endsAt($durationInSeconds);
-
-        if ($endsAt->isFuture()) {
-            $this->time_elapsed = $startsAt->diffInSeconds();
-            $this->status = self::BROADCAST_IN_PROGRESS;
-
-            return;
-        }
-
-        $this->status = self::BROADCAST_ENDED;
     }
 }
