@@ -56,7 +56,9 @@ class BroadcastsTableSeeder extends Seeder
             ];
 
     		foreach($broadcasts as $broadcast) {
-    			Broadcast::create($broadcast);
+                Broadcast::withoutEvents(function() use ($broadcast) {
+                    Broadcast::create($broadcast);
+                });
     		}
     }
 }
