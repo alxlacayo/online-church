@@ -71,7 +71,9 @@ class Broadcast extends Model
      * @var array
      */
     protected $dates = [
-        'starts_at'
+        'opens_at',
+        'starts_at',
+        'closes_at'
     ];
 
     /**
