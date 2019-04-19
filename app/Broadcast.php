@@ -62,7 +62,7 @@ class Broadcast extends Model
      * @var array
      */
     protected $dispatchesEvents = [
-        'saving' => BroadcastSaving::class
+        'saved' => BroadcastSaved::class
     ];
 
     /**
