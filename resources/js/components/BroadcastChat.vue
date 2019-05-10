@@ -32,8 +32,8 @@
 		</div>
 		<comment-form
 			v-if="isUserAuthenticated"
-			:value="newComment"
-			@input="newComment = $event"
+			:value="localCommentText"
+			@input="localCommentText = $event"
 			@submit="submitComment"
 			:class="[borderOnCommentForm ? 'border-top' : '', 'bg-white']"
 		/>
@@ -53,8 +53,8 @@
 
 	export default {
 		props: {
-			scrollContainerId: String,
 			broadcastId: Number,
+			scrollContainerId: String,
 			scollToBottomOnLoad: {
 				type: Boolean,
 				default: true
@@ -71,8 +71,8 @@
 		data: function() {
 			return {
 				comments: [],
-				newComment: '',
-				newCommentId: 1,
+				localCommentId: 1,
+				localCommentText: '',
 				cachedComment: '',
 				isLoading: false,
 			}
@@ -89,59 +89,47 @@
 			submitComment: function() {
 				if (this.isLoading) { return; }
 
-				if (!this.isUserAuthenticated) { return; }
+				if (this.localCommentText.length < 1) { return; }
 
 				axios
 					.post('/w/api/broadcasts/' + this.broadcastId + '/comments', {
-						commentId: this.newCommentId,
-						text: this.newComment
+						localCommentId: this.localCommentId,
+						text: this.localCommentText
 					})
 					.then(response => {
-						// Flip the array to start at the end would be better?
 						const index = this.comments.findIndex(comment => {
-							return comment.localCommentId == response.data.local_id;
+							return comment.localCommentId == response.data.local_comment_id;
 						});
 
-						this.comments[index] = response.data;
+						this.comments[index] = response.data.comment;
 					})
 					.catch(error => {
-						// Do something if comment fails
-						// this.newComment = this.cachedComment;
+						//
 					})
 					.then(() => {
 						this.isLoading = false;
 					});
 
 				const comment = {
-					localCommentId: this.newCommentId,
-					text: this.newComment,
+					localCommentId: this.localCommentId,
+					text: this.localCommentText,
 					user: this.user
 				};
 
 				this.$_chatMixin_publishComment(comment);
 
-				this.cachedComment = this.newComment;
-				this.newComment = '';
-				this.newCommentId++;
+				this.cachedComment = this.localCommentText;
+				this.localCommentText = '';
+				this.newLocalCommentId++;
 				this.isLoading = true;
 			},
 			login: function() {
 				this.$router.push({ name: 'login', query: { redirect: this.$route.path } });
 			}
 		},
-		created: function() {
-			axios
-				.get('/w/api/broadcasts/' + this.broadcastId + '/comments')
-				.then(response => {
-					this.$_chatMixin_publishComments(response.data, this.scollToBottomOnLoad);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		},
 		mounted: function() {
 			Echo.channel('broadcast.chat.' + this.broadcastId)
-				.listen('BroadcastCommentCreated', comment => {
+				.listen('BroadcastComment\\BroadcastCommentCreated', comment => {
 					this.$_chatMixin_publishComment(comment);
 			});	
 		},

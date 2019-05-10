@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Inspiring;
+use App\Services\Broadcast\ConfigureAllBroadcasts;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,8 @@ use Illuminate\Foundation\Inspiring;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
+
+Artisan::command('configure-broadcasts', function (ConfigureAllBroadcasts $configureAllBroadcasts) {
+    $configureAllBroadcasts->execute();
+    $this->comment('Boom shakalaka!');
+})->describe('Configure all the broadcasts!');

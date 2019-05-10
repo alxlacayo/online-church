@@ -11,21 +11,23 @@
 |
 */
 
-Route::group(['prefix' => 'w/api'], function() { 
+Route::get('test', 'PlayController@index'); // delete this
 
-	Route::get('home', 'HomeController@index');
+Route::group(['prefix' => 'w/api'], function() {
 
-	Route::resource('sermons', 'SermonController')->only([
-	    'index', 'show'
-	]);
+	Route::get('schedule', 'BroadcastController@getAll');
 
-	Route::get('schedule', 'BroadcastController@index');
+	Route::get('broadcasts/{broadcast}', 'BroadcastController@get');
 
-	Route::get('broadcasts/{broadcast}', 'BroadcastController@show');
+	Route::get('broadcasts/{broadcast}/time_elapsed', 'BroadcastController@getTimeElapsed');
 
-	Route::get('broadcasts/{broadcast}/comments', 'BroadcastCommentController@index');
+	Route::post('broadcasts/{broadcast}/comments', 'BroadcastCommentController@create');
 
-	Route::post('broadcasts/{broadcast}/comments', 'BroadcastCommentController@store');
+	Route::get('sermons', 'SermonController@getAll');
+
+	Route::get('sermons/previous', 'SermonController@getPrevious');
+
+	Route::get('sermons/{id}', 'SermonController@get');
 
 	Route::post('login', 'Auth\LoginController@login');
 
@@ -50,19 +52,21 @@ Route::group(['prefix' => 'w/api'], function() {
 
 Route::group(['prefix' => 'w/api/host', 'namespace' => 'Host'], function() { 
  	
+	Route::get('authorize', 'AuthorizeController');
+
 	Route::get('dashboard', 'HostDashboardController@index');
 
-	Route::get('comments', 'HostCommentController@index');
+	Route::get('comments', 'HostCommentController@getAll');
 
-	Route::post('comments', 'HostCommentController@store');
+	Route::post('comments', 'HostCommentController@create');
 });
-
-Route::group(['prefix' => 'w/api/admin'], function() { 
-
-	Route::put('sermons/{sermon}/edit', 'SermonController@update');
+	
+Route::group(['prefix' => 'w/api/admin', 'namespace' => 'Admin'], function() { 
+	// SECURE THIS FOR ADMINS ONLY!!!!!
+	Route::post('broadcast/create', 'BroadcastController@create');
 });
 
 // Define this route so we dont get 'password.reset' route 404 error.
 Route::get('password/reset/{token}', 'SPAController@index')->name('password.reset');
 
-Route::fallback('SPAController@index');
+Route::fallback('SPAController');

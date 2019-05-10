@@ -9,7 +9,7 @@ use App\Broadcast;
 use App\HostComment;
 use Cookie;
 
-class HostDashboardController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Instantiate a new controller instance.

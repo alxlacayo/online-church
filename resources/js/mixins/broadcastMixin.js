@@ -1,9 +1,14 @@
 import { mapState } from 'vuex'
 
 export default {
+	data: function() {
+		return {
+			$_broadcastMixin_showVideo: true
+		}
+	},
 	computed: {
 		...mapState([
-			'introVideo',
+			'introVideo'
 		]),
 		$_broadcastMixin_isBroadcastLoaded: function() {
 			return this.broadcast !== null;
@@ -21,30 +26,36 @@ export default {
 			return this.broadcast.live;
 		},
 		$_broadcastMixin_hasNotes: function() {
-			return this.broadcast.sermon && this.broadcast.sermon.notes !== null;
+			return (typeof this.broadcast.sermon !== 'undefined' && this.broadcast.sermon !== null)
+				? (typeof this.broadcast.sermon.notes !== 'undefined' && this.broadcast.sermon.notes !== null)
+					? true
+					: false
+				: false;
 		},
-		$_broadcastMixin_title: function() {
+		$_broadcastMixin_name: function() {
 			return this.broadcast.live
 				? this.broadcast.name
 				: this.broadcast.sermon.title;
+		},
+		$_broadcastMixin_description: function() {
+			return this.broadcast.live
+				? this.broadcast.description
+				: this.broadcast.sermon.description;
 		},
 		$_broadcastMixin_videoId: function() {
 			return this.$_broadcastMixin_isBroadcastInProgress
 				? this.broadcast.sermon.vimeo_id
 				: this.introVideo.video_id;
 		},
-		$_broadcastMixin_timeElapsed: function() {
-			return this.broadcast.time_elapsed !== undefined ? this.broadcast.time_elapsed : 0;
-		},
 		$_broadcastMixin_image: function() {
 			return this.broadcast.live
 				? this.broadcast.image
 				: this.broadcast.sermon.image;
 		},
-		$_broadcastMixin_description: function() {
-			return this.broadcast.live
-				? this.broadcast.description
-				: this.broadcast.sermon.description;
+		$_broadcastMixin_timeElapsed: function() {
+			return (typeof this.broadcast.time_elapsed !== 'undefined')
+				? this.broadcast.time_elapsed
+				: 0;
 		},
 		$_broadcastMixin_nextBroadcastTime: function() {
 			// return Moment.utc(this.broadcast.starts_at)
@@ -56,9 +67,14 @@ export default {
 			return moment.calendar();
 		}
 	},
-	methods: {
-		$_broadcastMixin_broadcastStatusChanged: function(broadcast) {
-			this.broadcast = broadcast;
+	created: function() {
+		// If the broadcast is in progress then we need to hide the
+		// vimeo player temporarily as we wait for the server to
+		// respond with the broadcast data which includes the amount
+		// of time that has elapsed since the broadcast began. This
+		// has no effect on the Living As One live stream player.
+		if (this.$_broadcastMixin_isBroadcastInProgress) {
+			this.$data.$_broadcastMixin_showVideo = false;
 		}
 	}
 }

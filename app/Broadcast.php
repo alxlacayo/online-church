@@ -3,59 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Events\BroadcastSaved;
+use App\Events\Broadcast\BroadcastCreated;
+use App\Events\Broadcast\BroadcastSaved;
+use Carbon\Carbon;
 
 class Broadcast extends Model
 {
-    /**
-     * The number of minutes before start time to open the broadcast.
-     *
-     * @var int
-     */
-    const MINUTES_BEFORE_START = 10;
-
-    /**
-     * The number of minutes after broadcast has ended to keep chat open.
-     *
-     * @var int
-     */
-    const MINUTES_AFTER_END = 10;
-
-    /**
-     * The duration in seconds for live broadcast.
-     *
-     * @var int
-     */
-    const LIVE_BROADCAST_DURATION = 80 * 60;
-
-    /**
-     * The broadcast chat is open.
-     *
-     * @var string
-     */
-    const BROADCAST_OPEN = 'broadcast_open';
-
-    /**
-     * The broadcast is in progress.
-     *
-     * @var string
-     */
-    const BROADCAST_IN_PROGRESS = 'broadcast_in_progress';
-
-    /**
-     * The broadcast has ended.
-     *
-     * @var string
-     */
-    const BROADCAST_ENDED = 'broadcast_ended';
-
-    /**
-     * The broadcast chat has closed.
-     *
-     * @var string
-     */
-    const BROADCAST_CLOSED = 'broadcast_closed';
-
     /**
      * The event map for the model.
      *
@@ -82,7 +35,7 @@ class Broadcast extends Model
      * @var array
      */
     protected $hidden = [
-        'day', 'time', 'enabled', 'created_at', 'updated_at',
+        'day', 'time', 'sermon_id', 'recurring', 'created_at', 'updated_at'
     ];
 
     /**
@@ -90,7 +43,9 @@ class Broadcast extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'day', 'time', 'live', 'enabled'];
+    protected $fillable = [
+        'name', 'day', 'time', 'description', 'live', 'enabled', 'recurring', 'embed_code', 'image', 'starts_at'
+    ];
 
     /**
      * The attributes that should be cast to native types.
@@ -98,7 +53,9 @@ class Broadcast extends Model
      * @var array
      */
     protected $casts = [
+        'enabled' => 'boolean',
         'live' => 'boolean',
+        'recurring' => 'boolean'
     ];
 
     /**
@@ -106,7 +63,7 @@ class Broadcast extends Model
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends = ['status'];
 
     /**
      * Get the broadcast sermon.
@@ -126,5 +83,66 @@ class Broadcast extends Model
     public function comments()
     {
         return $this->hasMany('App\BroadcastComment');
+    }
+
+    /**
+     * Get the broadcast status.
+     * 
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        return $this->getStatus();
+    }
+
+    /**
+     * Get the broadcast status.
+     * 
+     * @return string
+     */
+    public function getTimeElapsedAttribute()
+    {
+        return $this->getTimeElapsed();
+    }
+
+    /**
+     * Get the broadcast status.
+     * 
+     * @return string
+     */
+    public function getStatus()
+    {
+        if (($this->opens_at)->isFuture() || ($this->closes_at)->isPast()) {
+            return 'broadcast_closed';
+        }
+
+        if (($this->starts_at)->isFuture()) {
+            return 'broadcast_open';
+        }
+
+        return 'broadcast_in_progress';
+    }
+
+    public function isClosed()
+    {
+        return $this->getStatus() == 'broadcast_closed';
+    }
+
+    public function getTimeElapsed()
+    {
+        $timeElapsed = ($this->starts_at)->diffInSeconds(Carbon::now(), false);
+
+        return $timeElapsed > 0 ? $timeElapsed : 0;
+    }
+
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEnabled($query)
+    {
+        return $query->where('enabled', 1);
     }
 }

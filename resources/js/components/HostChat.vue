@@ -25,7 +25,7 @@
 		>	
 			<span
 				v-if="showLoadPreviousCommentsButton"
-				@click="loadPreviousComments"
+				@click="loadComments"
 				class="d-block mb-32 text-button text-button--small text-muted"
 			>
 				Load previous comments
@@ -73,8 +73,7 @@
 			helperMixin
 		],
 		props: {
-			scrollContainerId: String,
-			previousComments: Array
+			scrollContainerId: String
 		},
 		data: function() {
 			return {
@@ -82,9 +81,9 @@
 				newComment: '',
 				newCommentId: 1,
 				cachedComment: '',
-				showLoadPreviousCommentsButton: true,
+				showLoadPreviousCommentsButton: false,
 				isLoading: false,
-				interval: '',
+				interval: null,
 				hosts: [],
 			}
 		},
@@ -93,15 +92,12 @@
 				'user',
 			]),
 			maxId: function() {
-				return this.comments[0].id;
+				return (typeof this.comments[0] !== 'undefined') 
+					? this.comments[0].id
+					: null;
 			},
 			commentCount: function() {
 				return this.comments.length;
-			}
-		},
-		watch: {
-			previousComments: function() {
-				this.$_chatMixin_publishComments(this.previousComments);
 			}
 		},
 		methods: {
@@ -112,20 +108,18 @@
 
 				axios
 					.post('/w/api/host/comments', {
-						commentId: this.newCommentId,
+						localCommentId: this.newCommentId,
 						text: this.newComment
 					})
 					.then(response => {
-						// Flip the array to start at the end would be better?
 						const index = this.comments.findIndex(comment => {
-							return comment.localCommentId == response.data.local_id;
+							return comment.localCommentId == response.data.local_comment_id;
 						});
 
-						this.comments[index] = response.data;
+						this.comments[index] = response.data.comment;
 					})
 					.catch(error => {
-						// Do something if comment fails
-						// this.newComment = this.cachedComment;
+						//
 					})
 					.then(() => {
 						this.isLoading = false;
@@ -144,16 +138,22 @@
 				this.newCommentId++;
 				this.isLoading = true;
 			},
-			loadPreviousComments: function() {
+			loadComments: function() {
+				let params = {};
+
+				if (this.maxId !== null) {
+					params.maxId = this.maxId;
+				}
+
 				axios
-					.get('/w/api/host/comments?maxid=' + this.maxId)
+					.get('/w/api/host/comments', params)
 					.then(response => {
+						// update this
 						if (response.data.comments.length < response.data.limit) {
 							this.showLoadPreviousCommentsButton = false;
 						}
 
 						this.prependPreviousComments(response.data.comments);
-						
 					})
 					.catch(error => {
 
@@ -163,6 +163,11 @@
 					});
 			},
 			prependPreviousComments: function(comments) {
+				if (this.comments.length == 0) {
+					this.$_chatMixin_publishComments(comments);
+					return;
+				}
+
 				let hostChat = document.getElementById("host-chat");
 				let hostChatScrollTop = hostChat.scrollTop;
 				let firstComment = document.getElementById("comment-" + this.comments[0].id);
@@ -177,6 +182,8 @@
 		},
 		created: function() {
 
+			this.loadComments();
+
 			Echo.connector.pusher.config.auth.headers['X-XSRF-TOKEN'] = this.$_helperMixin_getXSRFCookie();
 
 			Echo.join('host.chat')
@@ -185,11 +192,9 @@
 			    })
 			    .joining((user) => {
 			    	this.hosts.push(user);
-			    	console.log(user.name + ' has joined.');
 			    })
 			    .leaving((user) => {
 			    	this.hosts = this.hosts.filter(host => host.id != user.id);
-			        console.log(user.name + ' has left.');
 			    })
 			    .listen('HostCommentCreated', (comment) => {
 			        this.$_chatMixin_publishComment(comment);

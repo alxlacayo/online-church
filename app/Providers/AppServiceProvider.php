@@ -26,14 +26,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (App::environment('local')) {
-            DB::listen(function ($query) {
-                Log::debug([
-                    $query->sql,
-                    $query->bindings,
-                    $query->time
-                ]);   
-            });  
-        }
+        // if (App::environment('local')) {
+        //     DB::listen(function ($query) {
+        //         Log::debug([
+        //             $query->sql,
+        //             $query->bindings,
+        //             $query->time
+        //         ]);   
+        //     });  
+        // }
     }
 }

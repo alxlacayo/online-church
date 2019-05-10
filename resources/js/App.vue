@@ -12,7 +12,7 @@
 	import NoHeaderLayout from './layouts/NoheaderLayout'
 	import HostLayout from './layouts/HostLayout'
 	import { mapState } from 'vuex'
-	import { mapMutations } from 'vuex'
+	import { mapActions } from 'vuex'
 
 	export default {
 		components: {
@@ -31,29 +31,23 @@
 			}
 		},
 		methods: {
-			...mapMutations([
-				'setNextBroadcast',
-			]),
-		    broadcastStatusChanged: function(broadcast) {		    	
-		    	this.setNextBroadcast(broadcast);
-		    	// if ((this.$router.currentRoute.name == 'broadcast' 
-		    	// 	&& this.$refs.router.broadcast.id == broadcast.id)
-		    	// 	|| this.$router.currentRoute.name == 'host') {
-
-		    	// 	this.$refs.router.$_broadcastMixin_broadcastStatusChanged(broadcast);
-		    	// }
-		    }
+			...mapActions([
+				'updateBroadcast',
+			])
 		},
 	    created: function() {
 			Echo.channel('main')
-				.listen('BroadcastOpen', data => {
-					this.broadcastStatusChanged(data);
+				.listen('Broadcast\\BroadcastOpen', data => {
+					this.updateBroadcast(data);
 				})
-				.listen('BroadcastStarting', data => {
-					this.broadcastStatusChanged(data)
+				.listen('Broadcast\\BroadcastInProgress', data => {
+					this.updateBroadcast(data);
 				})
-				.listen('BroadcastClosed', data => {
-					this.broadcastStatusChanged(data);
+				.listen('Broadcast\\BroadcastClosed', data => {
+					//this.broadcastStatusChanged(data);
+				})
+				.listen('Broadcast\\BroadcastChanged', data => {
+					this.updateBroadcast(data);
 				});
 	    }
 	}

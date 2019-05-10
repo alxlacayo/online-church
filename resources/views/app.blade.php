@@ -9,6 +9,12 @@
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     
+    <script type="text/javascript">
+        window.AppUser = @json($user);
+        window.AppIntroVideo = @json($intro_video);
+        window.AppBroadcasts = @json($broadcasts);
+    </script>
+    
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1725903-8"></script>
     <script>
@@ -17,12 +23,6 @@
         gtag('js', new Date());
 
         gtag('config', 'UA-1725903-8');
-    </script>
-
-    <script type="text/javascript">
-        window.AppUser = @if(isset($user)) @json($user) @else null @endif;
-        window.AppIntroVideo = @json($intro_video);
-        window.AppNextBroadcast = @json($next_broadcast);
     </script>
 </head>
 <body>

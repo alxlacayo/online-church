@@ -62,15 +62,6 @@
 			}
 		},
 		methods: {
-			loadSermons: function() {
-				axios
-					.get(this.endpoint)
-					.then(response => {
-						this.sermons.push(...response.data.data);
-						this.nextPage = response.data.next_page_url;
-						this.showLoadMoreButton = this.nextPage === null ? false : true;
-					});
-			},
 			publishedDate: function(timestamp) {
 				return Moment.utc(timestamp)
 					.local()
@@ -79,7 +70,13 @@
 			}
 		},
 		created: function() {
-			this.loadSermons();
+			axios
+				.get(this.endpoint)
+				.then(response => {
+					this.sermons.push(...response.data.data);
+					this.nextPage = response.data.next_page_url;
+					this.showLoadMoreButton = this.nextPage === null ? false : true;
+				});
 		}
 	}
 </script>

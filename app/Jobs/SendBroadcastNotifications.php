@@ -1,84 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Events\BroadcastOpen;
-use App\Events\BroadcastStarting;
-use App\Events\BroadcastClosed;
-use App\Broadcast;
-use App\Sermon;
+use App\Events\Broadcast\BroadcastErrorFound;
+use App\Events\Broadcast\BroadcastOpen;
+use App\Events\Broadcast\BroadcastInProgress;
+use App\Events\Broadcast\BroadcastClosed;
 use Carbon\Carbon;
+use App\Broadcast;
 
 class SendBroadcastNotifications
 {
     use Dispatchable, Queueable;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
+    public function handle() : void
     {
         $now = Carbon::now()->second(0)->microseconds(0);
 
-        // Copy $now and add minutes so we can check if
-        // now + MINUTES_BEFORE_START == publish_on/start_at time
-        $possibleStartTime = $now->copy()->addMinutes(Broadcast::MINUTES_BEFORE_START);
-
-        $sermon = Sermon::where('publish_on', '<=', $possibleStartTime)
-            ->latest('publish_on')
-            ->first();
-
-        $broadcasts = Broadcast::where('starts_at', '<=', $possibleStartTime)
-            ->where('enabled', 1)
-            ->oldest('starts_at')
-            ->get();
+        $broadcasts = Broadcast::where('enabled', 1)->get();
 
         foreach ($broadcasts as $broadcast) {
-            $durationInSeconds = $broadcast->live ? Broadcast::LIVE_BROADCAST_DURATION : $sermon->duration;
-            $opensAt = $broadcast->opensAt();
-            $startsAt = $broadcast->starts_at;
-            $closesAt = $broadcast->closesAt($durationInSeconds);
+            
+            if (($broadcast->opens_at === null) || ($broadcast->starts_at === null) || ($broadcast->closes_at === null)) {
+                event(new BroadcastErrorFound($broadcast));
 
-            if ($now == $opensAt) {
-                if (! $broadcast->live) { 
-                    $broadcast->sermon = $sermon;
-                }
+                \Log::debug("Broadcast Error found on broadcast id $broadcast->id on $now");
+            }
 
-                $broadcast->status = Broadcast::BROADCAST_OPEN;
+            if ($now == $broadcast->opens_at) {
+                broadcast(new BroadcastOpen($broadcast));
 
-                broadcast(new BroadcastOpen($broadcast->toArray()));
+            } else if ($now == $broadcast->starts_at) {
+                broadcast(new BroadcastInProgress($broadcast));
 
-            } else if ($now == $startsAt) {
-                if (! $broadcast->live) { 
-                    $broadcast->sermon = $sermon;
-                }
-
-                $broadcast->status = Broadcast::BROADCAST_IN_PROGRESS;
-
-                broadcast(new BroadcastStarting($broadcast->toArray()));
-
-            } else if ($closesAt->isPast()) {
-                // Save broadcast so our listener can update
-                // the new starts_at timestamp
-
-                $broadcast->save();
-                $broadcast->status = Broadcast::BROADCAST_CLOSED;
-
-                broadcast(new BroadcastClosed($broadcast->toArray()));
+            } else if (($broadcast->closes_at)->isPast()) {
+                broadcast(new BroadcastClosed($broadcast));
             }
         }
     }

@@ -1,51 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Sermon;
-use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use App\Services\Sermon\GetSermon;
+use App\Services\Sermon\GetAllSermons;
+use App\Services\Sermon\GetPreviousSermons;
 
 class SermonController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function get(string $id, GetSermon $service) : JsonResponse
+    {   
+        $sermon = $service->execute($id);
+
+        return response()->json($sermon);
+    }
+
+    public function getAll(GetAllSermons $service) : JsonResponse
     {        
-        $pager = Sermon::latest('publish_on')
-            ->where('publish_on', '<=', Carbon::now())
-            ->simplePaginate(10, ['id', 'title', 'image', 'publish_on']);
+        $pager = $service->execute();
 
         return response()->json($pager);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $sermon
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Sermon $sermon)
-    {
-        return response()->json($sermon);
-    }
+    public function getPrevious(GetPreviousSermons $service) : JsonResponse
+    {   
+        $sermons = $service->execute();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Sermon  $sermon
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Sermon $sermon)
-    {
-        $description = htmlentities( $request->input('description') );
-
-        $sermon->description = $description;
-
-        $sermon->save();
+        return response()->json([
+            'sermons' => $sermons
+        ]);
     }
 }

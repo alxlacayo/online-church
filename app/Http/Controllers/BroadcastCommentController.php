@@ -1,65 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\BroadcastComment\CreateBroadcastCommentRequest;
+use App\Services\BroadcastComment\CreateBroadcastComment;
 use App\Broadcast;
 use App\BroadcastComment;
-use App\Events\BroadcastCommentCreated;
 
 class BroadcastCommentController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
-        $this->middleware('auth')->except('index');
+        $this->middleware('auth');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Broadcast  $broadcast
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Broadcast $broadcast)
+    public function create(CreateBroadcastCommentRequest $request, CreateBroadcastComment $service, Broadcast $broadcast) : JsonResponse
     {
-        $broadcast->load(['comments' => function($query) use ($broadcast) {
-            $query->with('user.roles')
-                ->where('created_at', '>=', $broadcast->opensAt());
-        }]);
+        $user = $request->user();
+        $text = $request->input('text');
+        $localCommentId = $request->input('localCommentId');
 
-        return $broadcast->comments; 
-    }
-
-    /**
-     * Store a newly created broadcast comment.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $broadcastId
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request, $broadcastId)
-    {      
-        // Need to add validation for text
-
-        $broadcastComment = new BroadcastComment;
-        $broadcastComment->text = $request->input('text');
-        $broadcastComment->user()->associate($request->user());
-        $broadcastComment->broadcast_id = $broadcastId;
-
-        // change to try catch? // return something
-        if ($broadcastComment->save()) {
-            broadcast(new BroadcastCommentCreated($broadcastComment->toArray()))->toOthers();
-            
-            $broadcastComment->local_id = $request->input('commentId');
-
-            return response()->json($broadcastComment);
-        } else {
-            return response()->json(['message' => 'Something happened. Try again.'], 500);
-        }
+        $broadcastComment = $service->execute($broadcast, $user, $text);
+        
+        return response()->json([
+            'local_comment_id' => $localCommentId,
+            'comment' => $broadcastComment
+        ]);
     }
 }

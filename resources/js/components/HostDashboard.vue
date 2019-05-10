@@ -12,30 +12,25 @@
 					v-if="$_broadcastMixin_isBroadcastLive && $_broadcastMixin_isBroadcastInProgress"
 					v-html="broadcast.embed_code"
 					class="d-flex"
-				></video-player-living-as-one>
+				/>
 				<video-player-vimeo 
-					v-else
+					v-if="!$_broadcastMixin_isBroadcastLive && $data.$_broadcastMixin_showVideo"
 					:video-id="$_broadcastMixin_videoId"
 					:time-elapsed="$_broadcastMixin_timeElapsed"
 					:autoplay="autoplay"
 					class="video-container bg-black"
 				/>
-				<div 
-					v-if="$_broadcastMixin_isBroadcastLive"
-					class="p-30 p-md-40 text-white overflow-auto"
-				>
-					<h1>{{ broadcast.name }}</h1>
-					<p>{{ broadcast.description }}</p>
+				<div class="p-30 p-md-40 text-white overflow-auto">	
+					<h1>{{ $_broadcastMixin_name }}</h1>
+					<p>{{ $_broadcastMixin_description }}</p>
+					<div
+						v-if="$_broadcastMixin_hasNotes"
+						v-html="broadcast.sermon.notes"
+					></div>
 				</div>
-				<div
-					v-else-if="$_broadcastMixin_hasNotes"
-					v-html="broadcast.sermon.notes"
-					class="p-30 p-md-40 text-white overflow-auto"
-				></div>
 			</template>
 		</div>
 		<host-chat
-			:previousComments="hostComments"
 			scroll-container-id="host-chat"
 			class="d-flex flex-column col-4 bg-light-grey border-right"
 		/>
@@ -44,11 +39,12 @@
 				<span class="xlarge font-weight-bold">Broadcast chat</span>
 			</div>
 			<broadcast-chat
-				v-if="$_broadcastMixin_isBroadcastLoaded && $_broadcastMixin_isBroadcastOpen"
+				v-if="$_broadcastMixin_isBroadcastOpen"
+				ref="broadcastChat"
 				:broadcast-id="broadcast.id"
 				:border-on-comment-form="true"
 				scroll-container-id="broadcast-comments"
-			></broadcast-chat>
+			/>
 		</div>
 	</div>
 </template>
@@ -60,6 +56,7 @@
 	import BroadcastChat from '../components/BroadcastChat'
 	import broadcastMixin from '../mixins/broadcastMixin'
 	import { mapState } from 'vuex'
+	import { mapActions } from 'vuex'
 
 	export default {
 		components: {
@@ -71,38 +68,55 @@
 		mixins: [broadcastMixin],
 		data: function() {
 			return {
-				hostComments: []
 			}
 		},
 		beforeRouteEnter (to, from, next) {
 			axios
-				.get('/w/api/host/dashboard')
-				.then(response => {
-					next(vm => vm.setData(response.data));
-				})
+				.get('/w/api/host/authorize')
+				.then(response => next())
 				.catch(error => {
-					if (error.response.status === 401) { 
-						next('login');
-					} else {
-						next('/');
+					switch (error.response.status) {
+						case 401:
+							next('login');
+							break;
+						default:
+							next('/');
 					}
 				});
 		},
 		computed: {
 			...mapState([
-				'nextBroadcast',
+				'broadcasts',
 			]),
 			broadcast: function() {
-				return this.nextBroadcast;
+				return this.broadcasts[0];
 			},
 			autoplay: function() {
 				return this.$_broadcastMixin_isBroadcastInProgress;
 			}
 		},
-		methods: {
-			setData: function(data) {
-				this.hostComments.push(...data.host_comments);
+		watch: {
+			broadcast: function(val) {
+				console.log(val.status);
 			}
+		},
+		methods: {
+			...mapActions([
+				'updateBroadcast',
+			])
+		},
+		created: function() {
+			// Load the current broadcast data from the server.
+			axios
+				.get('/w/api/broadcasts/' + this.broadcast.id)
+				.then(response => {
+					this.updateBroadcast(response.data.broadcast);
+					this.$refs.broadcastChat.comments.unshift(...response.data.comments);
+					//this.$data.$_broadcastMixin_showVideo = true;
+				})
+				.catch(error => {
+					//
+				});
 		}
 	}
 </script>

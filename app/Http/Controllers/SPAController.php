@@ -2,42 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\IntroVideo;
-use App\Broadcast;
-use Auth;
+use App\Services\User\GetCurrentUser;
+use App\Services\IntroVideo\GetIntroVideo;
+use App\Services\Broadcast\GetAllBroadcasts;
+use Carbon\Carbon;
 
 class SPAController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Return view with inital app data.
      */
-    public function index(Request $request)
+    public function __invoke(GetCurrentUser $getCurrentUser, GetIntroVideo $getIntroVideo, GetAllBroadcasts $getAllBroadcasts)
     {	
-    	$user = Auth::user();
-
-        if (Auth::check()) {
-            $user->makeVisible('email');
-            $user->setProfilePictureSize('large');
-        }
-
-        $nextBroadcast = Broadcast::where('enabled', 1)
-            ->oldest('starts_at')
-            ->first();
-            
-        $nextBroadcast->configure();
-
-        $introVideo = IntroVideo::where('enabled', 1)
-            ->orderByDesc('id')
-            ->first();
-
         return view('app')->with([
-            'user' => $user,
-            'intro_video' => $introVideo,
-            'next_broadcast' => $nextBroadcast
+            'user' => $getCurrentUser->execute(),
+            'intro_video' => $getIntroVideo->execute(),
+            'broadcasts' => $getAllBroadcasts->execute()
         ]);
     }
 }

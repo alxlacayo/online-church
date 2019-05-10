@@ -8,14 +8,14 @@
 						class="close"
 					></span>
 				</div>
-				<div class="d-flex mx-0 mx-lg-60 flex-md-grow-1 flex-shrink-1 video-wrapper">
+				<div class="d-flex mx-0 mx-lg-60 flex-md-grow-1 flex-shrink-1 video-wrapper">	
 					<video-player-living-as-one
 						v-if="$_broadcastMixin_isBroadcastLive && $_broadcastMixin_isBroadcastInProgress"
 						v-html="broadcast.embed_code"
 						class="d-flex flex-grow-1"
-					></video-player-living-as-one>
+					/>
 					<video-player-vimeo
-						v-else
+						v-if="!$_broadcastMixin_isBroadcastLive && $data.$_broadcastMixin_showVideo"
 						:video-id="$_broadcastMixin_videoId"
 						:time-elapsed="$_broadcastMixin_timeElapsed"
 						class="px-0 px-lg-60"
@@ -25,14 +25,11 @@
 					<salvation-button
 						@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
 						:isSmallScreenButton="false"
-					></salvation-button>
+					/>
 				</div>
-				<salvation-confirmation
-					@hide-salvation-confirmation="$_salvationMixin_hideSalvationConfirmation"
-					:isSalvationConfirmationVisible="$data.$_salvationMixin_isSalvationConfirmationVisible"
-				></salvation-confirmation>
 			</div>
 			<broadcast-chat
+				ref="broadcastChat"
 				:broadcast-id="broadcast.id"
 				:scoll-to-bottom-on-load="false"
 				scroll-container-id="broadcast-comments"
@@ -41,9 +38,9 @@
 				<salvation-button
 					@show-salvation-confirmation="$_salvationMixin_showSalvationConfirmation"
 					class="d-md-none flex-shrink-0 justify-content-center salvation-button--small-screen"
-				></salvation-button>
+				/>
 				<div class="px-30 px-md-40 py-40 bg-white">
-					<h1>{{ $_broadcastMixin_title }}</h1>
+					<h1>{{ $_broadcastMixin_name }}</h1>
 					<p>{{ $_broadcastMixin_description }}</p>
 					<template v-if="$_broadcastMixin_hasNotes">
 						<p
@@ -63,6 +60,10 @@
 		<template v-if="$_broadcastMixin_isBroadcastLoaded && $_broadcastMixin_isBroadcastClosed">
 			<span>{{ $_broadcastMixin_nextBroadcastTime }}</span>
 		</template>
+		<salvation-confirmation
+			@hide-salvation-confirmation="$_salvationMixin_hideSalvationConfirmation"
+			:isSalvationConfirmationVisible="$data.$_salvationMixin_isSalvationConfirmationVisible"
+		/>
 	</div>
 </template>
 
@@ -75,6 +76,7 @@
 	import broadcastMixin from '../mixins/broadcastMixin'
 	import salvationMixin from '../mixins/salvationMixin'
 	import { mapState } from 'vuex'
+	import { mapActions } from 'vuex'
 
 	export default {
 		components: {
@@ -90,7 +92,6 @@
 		],
 		data: function() {
 			return {
-				broadcast: null,
 				showNotes: false,
 				previousPage: null
 			}
@@ -100,17 +101,19 @@
 		},
 		computed: {
 			...mapState([
-				'nextBroadcast',
-			])
-		},
-		watch: {
-			nextBroadcast: function(broadcast) {
-				if (broadcast.id == this.$route.params.broadcast_id) {
-					this.broadcast = broadcast;
-				}
-			}
+				'broadcasts',
+			]),
+			broadcast: function() {
+				let broadcastId = parseInt(this.$route.params.broadcast_id);
+				let index = this.broadcasts.findIndex(broadcast => broadcast.id == broadcastId);
+
+				return index > -1 ? this.broadcasts[index] : null;
+			},
 		},
 		methods: {
+			...mapActions([
+				'updateBroadcast',
+			]),
 	        toggleNotes: function() {
 	        	this.showNotes = !this.showNotes;
 	        },
@@ -121,20 +124,19 @@
 		    		this.$router.go(-1);
 		    	}
 		    }
-		},	
+		},
 		created: function() {
-			if (this.nextBroadcast.id == this.$route.params.broadcast_id) {
-				this.broadcast = this.nextBroadcast;
-			} else {
-				axios
-					.get('/w/api/broadcasts/' + this.$route.params.broadcast_id)
-					.then(response => {
-						this.broadcast = response.data;					
-					})
-					.catch(error => {
-						console.log(error);
-					});
-			}	
+			// Load the current broadcast data from the server.
+			axios
+				.get('/w/api/broadcasts/' + this.broadcast.id)
+				.then(response => {
+					this.updateBroadcast(response.data.broadcast);
+					this.$refs.broadcastChat.comments.unshift(...response.data.comments);
+					this.$data.$_broadcastMixin_showVideo = true;
+				})
+				.catch(error => {
+					//
+				});
 		}
 	}
 </script>

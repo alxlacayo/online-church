@@ -1,94 +1,47 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Host;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Events\HostCommentCreated;
-use App\HostComment;
+use App\Http\Requests\HostComment\GetAllHostCommentsRequest;
+use App\Http\Requests\HostComment\CreateHostCommentRequest;
+use App\Services\HostComment\GetAllHostComments;
+use App\Services\HostComment\CreateHostComment;
 
 class HostCommentController extends Controller
 {
-    /**
-     * Instantiate a new controller instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
         $this->middleware('auth');
         $this->middleware('role:host');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    public function getAll(GetAllHostCommentsRequest $request, GetAllHostComments $service) : JsonResponse
     {   
-        if ($request->has('maxid')) {
-            $maxId = $request->input('maxid');
-            $limit = 20;
-            
-            $comments = HostComment::with('user')
-                ->where('id', '<', $maxId)
-                ->orderBy('id', 'desc')
-                ->take($limit)
-                ->get()
-                ->reverse()
-                ->values();
-
-            return response()->json(['comments' => $comments, 'limit' => $limit]);
-        }       
+        $maxId = $request->input('maxid');
+        $limit = 20;
+        
+        return response()->json([
+            'comments' => $service->execute($maxId, $limit),
+            'limit' => $limit
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function create(CreateHostCommentRequest $request, CreateHostComment $service) : JsonResponse
     {   
-        $comment = new HostComment;
-        $comment->text = $request->input('text');
-        $comment->user()->associate($request->user());
+        $user = $request->user();
+        $text = $request->input('text');
+        $localCommentId = $request->input('localCommentId');
 
-        // change to try catch /// return something
-        if ($comment->save()) {
+        $hostComment = $service->execute($user, $text);
 
-            broadcast(new HostCommentCreated($comment->toArray()))->toOthers();
-
-            $comment->local_id = $request->input('commentId');
-
-            return response()->json($comment);
-        } else {
-            return response()->json(['message' => 'Something happened. Try again.'], 500);
-        }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json([
+            'local_comment_id' => $localCommentId,
+            'comment' => $hostComment
+        ]);
     }
 }

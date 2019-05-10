@@ -4,7 +4,7 @@
 			<div class="row no-gutters flex-grow-1">
 				<div class="col-10 col-lg-6 d-flex mb-60 flex-column move-up">
 					<div class="d-flex ml-30 ml-md-60 flex-column justify-content-center flex-grow-1">
-						<h1 class="huge text-white">{{ $_broadcastMixin_title }}</h1>
+						<h1 class="huge text-white">{{ $_broadcastMixin_name }}</h1>
 						<span class="text-muted">{{ $_broadcastMixin_nextBroadcastTime }}<br>is our next broadcast</span>
 					</div>
 					<router-link
@@ -18,20 +18,13 @@
 						v-else
 						:to="{ name: 'schedule' }"
 						class="d-inline-block ml-30 ml-md-60 pb-10 align-self-start text-white font-weight-bold text-uppercase border-bottom-heavy"
-					>View Broadcast Schedule</router-link>
+					>
+						View Broadcast Schedule
+					</router-link>
 				</div>
 				<div class="col-7 offset-5 col-lg-10 offset-lg-2 sermon-image-container mb-lg-60">
 					<img :src="$_broadcastMixin_image">
-				</div>
-	 			<div class="col-3 offset-3 d-none d-lg-flex flex-column py-60 pr-30 pr-md-60 move-up">
-<!-- 	 				<div class="flex-grow-1">
-	 					<span class="d-block text-white font-weight-bold">Speaker</span>
-	 					<span class="d-block mb-48 text-muted">Dr. Ed Young</span>
-	 					<span class="d-block text-white font-weight-bold">Broadcasts</span>
-	 					<span class="d-block text-muted">{{ broadcastDates }}</span>
-	 				</div>
-					<p class="mb-0 text-muted">{{ $_broadcastMixin_description }}</p> -->
-				</div>				
+				</div>			
 			</div>
 		</div>
 		<div>
@@ -64,6 +57,7 @@
 <script>
 	import broadcastMixin from '../mixins/broadcastMixin'
 	import { mapState } from 'vuex'
+	import { mapGetters } from 'vuex'
 
 	export default {
 		mixins: [broadcastMixin],
@@ -74,10 +68,10 @@
 		},
 		computed: {
 			...mapState([
-				'nextBroadcast',
+				'broadcasts'
 			]),
 			broadcast: function() {
-				return this.nextBroadcast;
+				return this.broadcasts[0];
 			},
 			route: function() {
 				return this.$route.params.username
@@ -93,13 +87,6 @@
 					    lastWeek: '[Last] dddd',
 					    sameElse: 'DD/MM/YYYY'
 					});
-			},
-			broadcastDates: function() {
-				const moment = Moment.utc(this.broadcast.sermon.publish_on).local()
-				const starts = moment.format('MMM D');
-				const ends = moment.add(1, 'weeks').format('MMM D');
-
-				return starts + ' - ' + ends;
 			}
 		},
 		methods: {
@@ -112,7 +99,7 @@
 		},
 		created: function() {
 			axios
-				.get('/w/api/home')
+				.get('/w/api/sermons/previous')
 				.then(response => {
 					this.sermons = response.data.sermons;
 				})
